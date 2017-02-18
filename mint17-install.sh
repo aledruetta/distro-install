@@ -31,13 +31,13 @@ echo '### Install LAMP ###'
 
 echo '### Apache ###'
 sudo apt-get install apache2 -y
-sudo chown -R $USER.www-data html
-sudo chmod -R 775 html
+sudo chown -R $USER.www-data /var/www/html
+sudo chmod -R 775 /var/www/html
 ln -s /var/www/html ~
 
 echo '### PHP ###'
 sudo apt-get install php5 libapache2-mod-php5 -y
-cat '<?php phpinfo(); ?>' > ~/html/testphp.php
+echo '<?php phpinfo(); ?>' > ~/html/testphp.php
 firefox http://localhost/testphp.php
 
 echo '### MySQL ###'
@@ -46,8 +46,9 @@ sudo apt-get install mysql-server -y
 # mysql> SET PASSWORD FOR 'root'@'localhost' = PASSWORD('yourpassword');
 sudo apt-get install libapache2-mod-auth-mysql php5-mysql phpmyadmin -y
 
-sudo sed -ie 's/;extension=mysql.so/extension=mysql.so/' /etc/php5/apache2/php.ini
+sudo sed -ie "s/;extension=mysql.so/extension=mysql.so/" /etc/php5/apache2/php.ini
 sudo /etc/init.d/apache2 restart
-sudo cat 'Include /etc/phpmyadmin/apache.conf' >> /etc/apache2/apache2.conf
+sudo echo 'Include /etc/phpmyadmin/apache.conf' >> /etc/apache2/apache2.conf
 sudo /etc/init.d/apache2 restart
+
 firefox http://localhost/phpmyadmin
