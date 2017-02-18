@@ -45,9 +45,10 @@ sudo apt-get install mysql-server -y
 # mysql -u root
 # mysql> SET PASSWORD FOR 'root'@'localhost' = PASSWORD('yourpassword');
 sudo apt-get install libapache2-mod-auth-mysql php5-mysql phpmyadmin -y
-
-sudo sed -ie "s/;extension=mysql.so/extension=mysql.so/" /etc/php5/apache2/php.ini
+sudo sed -i 's/;extension=mysql.so/extension=mysql.so/' /etc/php5/apache2/php.ini
 sudo /etc/init.d/apache2 restart
+
+sudo sed -i -E '/^\s*(\/){2}\s*.*AllowNoPassword/s/^\s*(\/){2}\s*//' /etc/phpmyadmin/config.inc.php
 sudo echo 'Include /etc/phpmyadmin/apache.conf' >> /etc/apache2/apache2.conf
 sudo /etc/init.d/apache2 restart
 
