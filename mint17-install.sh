@@ -7,11 +7,14 @@
 #    \:\____/\  \::\ \   \:\____/\\:\_\ \ \
 #     \_____\/   \__\/    \_____\/ \_____\/
 #
-# Instalador de Linux Mint 17.3 computadores antigos do laboratório de
+# Instalador de Linux Mint 17.3 (Rosa) 32-bit
+# para computadores antigos do laboratório de
 # informática da ETEC de Ubatuba, SP.
 #
 # Hardware:
 # CPU Pentium 4, 1GB RAM, 40GB HD.
+#
+# Notas da versão: https://linuxmint.com/rel_rosa_mate.php
 #
 # Autores: Alejandro e Lucas.
 #
@@ -137,12 +140,12 @@ groups aluno
 echo 'Criando link simbólico na home -> /var/www/html...'
 sudo ln -s /var/www/html /home/aluno
 echo 'Salvando informação de hardware na home...'
-sudo inxi -F > ~/hardinfo.txt
+sudo inxi -F | tee ~/hardinfo.txt
 
 echo '####################################'
 echo '############ CHECKLIST #############'
 echo '####################################'
-echo ''
+
 echo '- Versão do Java'
 echo '- Versão e funcionamento do Netbeans. Plugins HTML e PHP.'
 echo '- Verificar Inkscape, Meld, Sublime, Dia, PyRenamer, Workbench'
