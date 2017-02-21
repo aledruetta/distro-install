@@ -7,7 +7,7 @@ sudo apt-get upgrade -y
 
 echo '### Codecs ###'
 echo 'Estamos instalando alguns codecs adicionais e as ferramentas de compilação...'
-sudo apt-get install ubuntu-restricted-extras build-essentials -y
+sudo apt-get install ubuntu-restricted-extras build-essential -y
 
 echo '### Java 8 SDK ###'
 echo 'Atualizando o Java SDK pra versão 8 via PPA...'
