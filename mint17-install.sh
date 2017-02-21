@@ -13,6 +13,7 @@
 #
 # Hardware:
 # CPU Pentium 4, 1GB RAM, 40GB HD.
+# Dual Boot Windows XP
 #
 # Notas da versão: https://linuxmint.com/rel_rosa_mate.php
 #
@@ -116,7 +117,8 @@ echo '####################################'
 echo '############ CHECKLIST #############'
 echo '####################################'
 
-echo '* Verifique as seguintes PPAs (não duplicadas):'
+echo 'Verifique as seguintes PPAs (não duplicadas):'
+echo '============================================='
 echo '   - ppa:openjdk-r/ppa'
 echo '   - ppa:vajdics/netbeans-installer'
 echo '   - ppa:webupd8team/sublime-text-3'
@@ -126,13 +128,16 @@ sudo inxi -r | grep netbeans-installer
 sudo inxi -r | grep webupd8team
 read -p 'Enter para continuar: '
 
-echo '* Verifique a versão do Java:'
+echo 'Verifique a versão do Java:'
+echo '==========================='
 java -version
 javac -version
 read -p 'Enter para continuar: '
 
-echo '* Verifique se os seguentes softwares foram instalado e os mesmos'
+echo 'Verifique se os seguentes softwares foram instalado e os mesmos'
+echo '==============================================================='
 echo 'estão funcionando corretamente:'
+echo '==============================='
 echo '   - Netbeans 8.1 (Plugins PHP e HTML)'
 echo '   - Workbench'
 echo '   - Inkscape'
@@ -143,7 +148,8 @@ echo '   - PyRenamer'
 echo '   - Dia'
 read -p 'Enter para continuar: '
 
-echo '* Verifique se a conta "aluno" foi criada corretamente:'
+echo 'Verifique se a conta "aluno" foi criada corretamente:'
+echo '====================================================='
 echo '/etc/passwd:'
 cat /etc/passwd | grep aluno
 echo 'groups:'
@@ -154,25 +160,30 @@ echo 'permissões:'
 ls -ld /var/www/html
 read -p 'Enter para continuar: '
 
-echo '* Verifique se o servidor Apache está funcionando corretamente:'
+echo 'Verifique se o servidor Apache está funcionando corretamente:'
+echo '============================================================='
 firefox http://localhost/ &
 read -p 'Enter para continuar: '
 
-echo '* Verifique se o PHP está funcionando corretamente:'
+echo 'Verifique se o PHP está funcionando corretamente:'
+echo '================================================='
 firefox http://localhost/testphp.php &
 read -p 'Enter para continuar: '
 sudo rm ~/html/testphp.php
 
-echo '* Verifique se o MySQL está funcionando corretamente ("exit" para sair):'
+echo 'Verifique se o MySQL está funcionando corretamente ("exit" para sair):'
+echo '======================================================================'
 # mysql> SET PASSWORD FOR 'root'@'localhost' = PASSWORD('yourpassword');
 mysql -u root
 read -p 'Enter para continuar: '
 
-echo '* Verifique o phpMyAdmin:'
+echo 'Verifique o phpMyAdmin:'
+echo '======================='
 firefox http://localhost/phpmyadmin &
 read -p 'Enter para continuar: '
 
-echo '* Verifique os arquivos de configuração:'
+echo 'Verifique os arquivos de configuração:'
+echo '======================================'
 echo '/etc/phpmyadmin/config.inc.php'
 cat /etc/phpmyadmin/config.inc.php | grep 'AllowNoPassword'
 echo '/etc/apache2/apache2.conf'
@@ -181,10 +192,13 @@ echo '/etc/php5/apache2/php.ini'
 cat /etc/php5/apache2/php.ini | grep 'extension=mysql.so/extension=mysql.so'
 read -p 'Enter para continuar: '
 
-echo '* Verifique se o Google é o search engine pro Firefox'
+echo 'Verifique se o Google é o search engine pro Firefox'
+echo '==================================================='
 echo 'nas contas "etec" e "aluno"'
+echo '==========================='
 read -p 'Enter para continuar: '
 
-echo '* Verificar relatório de hardware na home:'
+echo 'Verifique se o relatório de hardware foi criado na home:'
+echo '============================================='
 cat ~/hardinfo.txt
 read -p 'Enter para continuar: '
