@@ -108,7 +108,7 @@ echo 'password: "aluno". Ignorar as outras opções.'
 sudo adduser aluno
 sudo adduser aluno www-data
 sudo ln -s /var/www/html /home/aluno
-sudo inxi -F | tee ~/hardinfo.txt
+sudo inxi -F > ~/hardinfo.txt
 
 # Testes
 
@@ -183,4 +183,8 @@ read -p 'Enter para continuar: '
 
 echo '* Verifique se o Google é o search engine pro Firefox'
 echo 'nas contas "etec" e "aluno"'
+read -p 'Enter para continuar: '
+
+echo '* Verificar relatório de hardware na home:'
+cat ~/hardinfo.txt
 read -p 'Enter para continuar: '
