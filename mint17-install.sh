@@ -23,6 +23,22 @@
 # Autores: Alejandro e Lucas.
 #
 
+readonly DESCRIPTION="`lsb_release -ds`"
+readonly CODENAME=`lsb_release -cs`
+readonly DISTRIBUTOR=`lsb_release -is`
+readonly ARQPROC=`getconf LONG_BIT`
+
+echo "Sistema Operacional detectado: $DESCRIPTION ($ARQPROC-bit)"
+
+if [ $DISTRIBUTOR = "LinuxMint" ] && [ $CODENAME = "rosa" ] && \
+	[ $ARQPROC = "32" ]
+then
+	echo
+else
+	echo "Esse script foi escrito para Linux Mint 17.3 Rosa (32-bit)"
+	exit 1
+fi
+
 echo '##########################################'
 echo '############ Update & Upgrade ############'
 echo '##########################################'
