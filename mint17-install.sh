@@ -31,47 +31,67 @@ readonly DESCRIPTION="`lsb_release -ds`"
 readonly CODENAME=`lsb_release -cs`
 readonly DISTRIBUTOR=`lsb_release -is`
 readonly ARQPROC=`getconf LONG_BIT`
+readonly JDKPPA="/etc/apt/sources.list.d/openjdk-r-ppa-trusty.list"
 
 # Detectar Sistema Operacional
 
-echo "Sistema Operacional detectado: $DESCRIPTION ($ARQPROC-bit)"
+echo "[Script] Sistema Operacional detectado: $DESCRIPTION ($ARQPROC-bit)"
 
-if [ $DISTRIBUTOR = "LinuxMint" ] && [ $CODENAME = "rosa" ] && \
-	[ $ARQPROC -eq 32 ]
+if [ $DISTRIBUTOR != "LinuxMint" ] || [ $CODENAME != "rosa" ] || \
+	[ $ARQPROC -ne 32 ]
 then
-	echo "OK"
-else
-	echo "Esse script foi escrito para Linux Mint 17.3 Rosa (32-bit)"
-	echo "O sistema é incompatível!"
+	echo "[Script] Esse script foi escrito para Linux Mint 17.3 Rosa (32-bit)"
+	echo "[Script] O sistema é incompatível!"
 	exit 1
 fi
+printf "[Script] OK...\n\n"
 
 # Superusuário
 
-if [ `id -u` -ne 0 ]
-then
-	echo "El script debe ser executado como superusuário (sudo)!"
+echo "[Script] Superusuário?"
+
+if [ `id -u` -ne 0 ]; then
+	echo "[Script] El script debe ser executado como superusuário (sudo)!"
 	exit 1
 fi
+printf "[Script] OK...\n\n"
 
 # Atualizar pacotes
 
-sudo apt-get update
-sudo apt-get upgrade -y
+echo "[Script] Atualizando repositórios da distribuição..."
+# apt-get update
+printf "[Script] OK...\n\n"
 
-echo '################################'
-echo '##### Codecs e Compiladores ####'
-echo '################################'
+echo "[Script] Atualizando os pacotes..."
+apt-get upgrade -y
+printf "[Script] OK...\n\n"
 
+# Codecs e ferramentas de compilador
+
+echo "[Script] Instalando codecs e ferramentas de compilador..."
 sudo apt-get install ubuntu-restricted-extras build-essential -y
+printf "[Script] OK...\n\n"
 
-echo '####################################'
-echo '############ Java 8 SDK ############'
-echo '####################################'
+# Java OpenJDK 8
 
-sudo apt-add-repository ppa:openjdk-r/ppa -y
-sudo apt-get update
+if [ ! -s "$JDKPPA" ]; then
+	echo "[Script] Adicionando repositório de terceiros..."
+	sudo apt-add-repository ppa:openjdk-r/ppa -y
+	printf "[Script] OK...\n\n"
+
+	echo "[Script] Atualizando caché do repositório..."
+	sudo apt-get update
+	printf "[Script] OK...\n\n"
+else
+	echo "[Script] ppa:openjdk-r/ppa já existe"
+	printf "[Script] OK...\n\n"
+fi
+
+echo "[Script] Instalando Java OpenJDK 8..."
 sudo apt-get install openjdk-8-jdk -y
+printf "[Script] OK...\n\n"
+
+exit 0
 
 echo 'Por favor, selecione a versão 8 do Java SDK:'
 sudo update-alternatives --config java
