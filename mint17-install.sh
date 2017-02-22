@@ -7,7 +7,7 @@
 #    \:\____/\  \::\ \   \:\____/\\:\_\ \ \
 #     \_____\/   \__\/    \_____\/ \_____\/
 #
-# Instalador de Linux Mint 17.3 (Rosa) 32-bit
+# Instalador de Linux Mint 17.3 (Rosa)
 # para computadores antigos do laboratório de
 # informática da ETEC de Ubatuba, SP.
 #
@@ -15,6 +15,9 @@
 # CPU Pentium 4, 1GB RAM, 40GB HD.
 # Dual Boot Windows XP
 #
+# Distro:
+# Linux Mint 17.3 (Rosa), escritório Mate, 32-bit
+# Download: https://www.linuxmint.com/edition.php?id=205
 # Notas da versão: https://linuxmint.com/rel_rosa_mate.php
 #
 # Autores: Alejandro e Lucas.
@@ -28,7 +31,7 @@ sudo apt-get update
 sudo apt-get upgrade -y
 
 echo '################################'
-echo '############ Codecs ############'
+echo '##### Codecs e Compiladores ####'
 echo '################################'
 
 sudo apt-get install ubuntu-restricted-extras build-essential -y
@@ -65,7 +68,7 @@ echo '######################################'
 echo '############ Install Apps ############'
 echo '######################################'
 
-sudo apt-get install inkscape dia meld mysql-workbench pyrenamer -y
+sudo apt-get install git vim inkscape dia meld mysql-workbench pyrenamer -y
 
 echo '################################'
 echo '############ Apache ############'
@@ -89,7 +92,7 @@ echo '###############################'
 
 sudo apt-get install mysql-server -y
 sudo apt-get install libapache2-mod-auth-mysql php5-mysql phpmyadmin -y
-sudo sed -i 's/;extension=mysql.so/extension=mysql.so/' /etc/php5/apache2/php.ini
+sudo sed -i '/;\s*extension=mysql\.so/s/;\s*//' /etc/php5/apache2/php.ini
 sudo /etc/init.d/apache2 restart
 
 echo '####################################'
@@ -146,6 +149,8 @@ echo '   - Sublime-Text 3'
 echo '   - Meld'
 echo '   - PyRenamer'
 echo '   - Dia'
+echo '   - Vim'
+echo '   - Git'
 read -p 'Enter para continuar: '
 
 echo 'Verifique se a conta "aluno" foi criada corretamente:'
@@ -160,27 +165,16 @@ echo 'permissões:'
 ls -ld /var/www/html
 read -p 'Enter para continuar: '
 
-echo 'Verifique se o servidor Apache está funcionando corretamente:'
-echo '============================================================='
-firefox http://localhost/ &
+echo '===================='
+echo 'Verifique:'
+echo '- Apache'
+echo '- PHP'
+echo '- MySQL e phpMyAdmin'
+echo '===================='
+firefox http://localhost/ http://localhost/testphp.php http://localhost/phpmyadmin 2>/dev/null &
 read -p 'Enter para continuar: '
 
-echo 'Verifique se o PHP está funcionando corretamente:'
-echo '================================================='
-firefox http://localhost/testphp.php &
-read -p 'Enter para continuar: '
 sudo rm ~/html/testphp.php
-
-echo 'Verifique se o MySQL está funcionando corretamente ("exit" para sair):'
-echo '======================================================================'
-# mysql> SET PASSWORD FOR 'root'@'localhost' = PASSWORD('yourpassword');
-mysql -u root
-read -p 'Enter para continuar: '
-
-echo 'Verifique o phpMyAdmin:'
-echo '======================='
-firefox http://localhost/phpmyadmin &
-read -p 'Enter para continuar: '
 
 echo 'Verifique os arquivos de configuração:'
 echo '======================================'
@@ -199,6 +193,6 @@ echo '==========================='
 read -p 'Enter para continuar: '
 
 echo 'Verifique se o relatório de hardware foi criado na home:'
-echo '============================================='
+echo '========================================================'
 cat ~/hardinfo.txt
 read -p 'Enter para continuar: '
