@@ -24,7 +24,7 @@
 #
 
 
-# Constantes 
+# Constantes
 readonly DESCRIPTION="`lsb_release -ds`"
 readonly CODENAME=`lsb_release -cs`
 readonly DISTRIBUTOR=`lsb_release -is`
@@ -238,6 +238,36 @@ echo "[Script] Criando link simbólico na home do aluno para /var/www/html..."
 ln -s /var/www/html /home/aluno
 printf "[Script] OK...\n\n"
 
+# Atalhos escritório
+
+# Aplicativos dos quais serão criados atalhos
+echo "[Script] Criando atalhos pro escritório..."
+apps=('/usr/share/applications/gcalctool.desktop'
+'/usr/share/applications/libreoffice-writer.desktop'
+'/usr/share/applications/libreoffice-calc.desktop'
+'/usr/share/applications/gimp.desktop'
+'/usr/share/applications/inkscape.desktop'
+'/usr/share/applications/dia.desktop'
+'/usr/share/applications/meld.desktop'
+'/usr/share/applications/pyrenamer.desktop'
+'/usr/share/applications/vlc.desktop'
+'/usr/share/applications/sublime_text.desktop'
+'/usr/share/applications/netbeans.desktop'
+'/usr/share/applications/mysql-workbench.desktop')
+printf "[Script] OK...\n\n"
+
+echo "[Script] Mudando o proprietário e as permissões da área de trabalho do usuário"
+sudo chown etec:etec /home/aluno/Área\ de\ Trabalho/
+sudo chmod 1755 /home/aluno/Área\ de\ Trabalho/ /home/etec/Área\ de\ Trabalho/
+printf "[Script] OK...\n\n"
+
+echo "[Script] Copiando e configurando atalhos"
+sudo cp ${apps[@]} /home/aluno/Área\ de\ Trabalho/
+sudo cp ${apps[@]} /home/etec/Área\ de\ Trabalho/
+sudo chown etec:etec /home/aluno/Área\ de\ Trabalho/*.desktop /home/etec/Área\ de\ Trabalho/*.desktop
+sudo chmod 755 /home/aluno/Área\ de\ Trabalho/*.desktop /home/etec/Área\ de\ Trabalho/*.desktop
+printf "[Script] OK...\n\n"
+
 echo "[Script] Criando arquivo de texto na home com especificações do hardware..."
 inxi -F > /home/$USER/hardinfo.txt
 printf "[Script] OK...\n\n"
@@ -327,4 +357,3 @@ echo 'Verifique se o relatório de hardware foi criado na home:'
 echo '========================================================'
 cat /home/$USER/hardinfo.txt
 read -p 'Enter para continuar: '
-
