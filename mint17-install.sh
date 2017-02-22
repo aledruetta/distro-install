@@ -23,25 +23,38 @@
 # Autores: Alejandro e Lucas.
 #
 
+
+
+# Constantes
+
 readonly DESCRIPTION="`lsb_release -ds`"
 readonly CODENAME=`lsb_release -cs`
 readonly DISTRIBUTOR=`lsb_release -is`
 readonly ARQPROC=`getconf LONG_BIT`
 
+# Detectar Sistema Operacional
+
 echo "Sistema Operacional detectado: $DESCRIPTION ($ARQPROC-bit)"
 
 if [ $DISTRIBUTOR = "LinuxMint" ] && [ $CODENAME = "rosa" ] && \
-	[ $ARQPROC = "32" ]
+	[ $ARQPROC -eq 32 ]
 then
-	echo
+	echo "OK"
 else
 	echo "Esse script foi escrito para Linux Mint 17.3 Rosa (32-bit)"
+	echo "O sistema é incompatível!"
 	exit 1
 fi
 
-echo '##########################################'
-echo '############ Update & Upgrade ############'
-echo '##########################################'
+# Superusuário
+
+if [ `id -u` -ne 0 ]
+then
+	echo "El script debe ser executado como superusuário (sudo)!"
+	exit 1
+fi
+
+# Atualizar pacotes
 
 sudo apt-get update
 sudo apt-get upgrade -y
