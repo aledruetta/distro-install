@@ -75,20 +75,40 @@ echo "[Script] Instalando codecs e ferramentas de compilador..."
 apt-get install ubuntu-restricted-extras build-essential -y
 printf "[Script] OK...\n\n"
 
-# Java OpenJDK 8
+# PPA's
 
-if [ ! -s "$JDK_PPA_F" ]; then
+if [ ! -s "$JDK_PPA_F" ]; then		# Java
 	echo "[Script] Adicionando repositório de terceiros..."
 	apt-add-repository $JDK_PPA -y
-	printf "[Script] OK...\n\n"
-
-	echo "[Script] Atualizando caché do repositório..."
-	apt-get update
 	printf "[Script] OK...\n\n"
 else
 	echo "[Script] $JDK_PPA já existe"
 	printf "[Script] OK...\n\n"
 fi
+
+if [ ! -s "$NETB_PPA_F" ]; then		# Netbeans
+	echo "[Script] Adicionando repositório de terceiros..."
+	add-apt-repository $NETB_PPA -y
+	printf "[Script] OK...\n\n"
+else
+	echo "[Script] $NETB_PPA já existe"
+	printf "[Script] OK...\n\n"
+fi
+
+if [ ! -s "$SUB3_PPA_F" ]; then		# Sublime-Text
+	echo "[Script] Adicionando repositório de terceiros..."
+	add-apt-repository $SUB3_PPA -y
+	printf "[Script] OK...\n\n"
+else
+	echo "[Script] $SUB3_PPA já existe"
+	printf "[Script] OK...\n\n"
+fi
+
+echo "[Script] Atualizando caché do repositório..."
+apt-get update
+printf "[Script] OK...\n\n"
+
+# Java OpenJDK 8
 
 echo "[Script] Instalando Java OpenJDK 8..."
 apt-get install openjdk-8-jdk -y
@@ -105,37 +125,11 @@ printf "[Script] OK...\n\n"
 
 # Netbeans IDE 8.1
 
-if [ ! -s "$NETB_PPA_F" ]; then
-	echo "[Script] Adicionando repositório de terceiros..."
-	add-apt-repository $NETB_PPA -y
-	printf "[Script] OK...\n\n"
-
-	echo "[Script] Atualizando caché do repositório..."
-	apt-get update
-	printf "[Script] OK...\n\n"
-else
-	echo "[Script] $NETB_PPA já existe"
-	printf "[Script] OK...\n\n"
-fi
-
 echo "[Script] Instalando Netbeans 8.1 IDE..."
 apt-get install netbeans-installer -y
 printf "[Script] OK...\n\n"
 
 # Sublime Text
-
-if [ ! -s "$SUB3_PPA_F" ]; then
-	echo "[Script] Adicionando repositório de terceiros..."
-	add-apt-repository $SUB3_PPA -y
-	printf "[Script] OK...\n\n"
-
-	echo "[Script] Atualizando caché do repositório..."
-	apt-get update
-	printf "[Script] OK...\n\n"
-else
-	echo "[Script] $SUB3_PPA já existe"
-	printf "[Script] OK...\n\n"
-fi
 
 echo "[Script] Instalando Sublime Text 3..."
 apt-get install sublime-text -y
@@ -195,7 +189,7 @@ if [ ! -s "/etc/php5/apache2/php.ini.bak" ]; then
 	cp /etc/php5/apache2/php.ini /etc/php5/apache2/php.ini.bak
 fi
 
-sed -i '/;\s*extension=mysql\.so/s/;\s*//' /etc/php5/apache2/php.ini
+sed -i -E '/^;\s*extension=msql\.so/s/^;\s*//' /etc/php5/apache2/php.ini
 printf "[Script] OK...\n\n"
 
 echo "[Script] Reiniciando Apache..."
@@ -211,7 +205,7 @@ if [ ! -s "/etc/phpmyadmin/config.inc.php.bak" ]; then
 	cp /etc/phpmyadmin/config.inc.php /etc/phpmyadmin/config.inc.php.bak
 fi
 
-sed -i -E '/^\s*(\/){2}\s*.*AllowNoPassword/s/^\s*(\/){2}\s*//' /etc/phpmyadmin/config.inc.php
+sed -i -E '/^\s*(\/){2}\s.*AllowNoPassword/s/^(\/){2}\s//' /etc/phpmyadmin/config.inc.php
 printf "[Script] OK...\n\n"
 
 echo "[Script] Configurando Apache para acessar phpMyAdmin..."
@@ -319,9 +313,7 @@ read -p 'Enter para continuar: '
 echo 'Verifique se a conta "aluno" foi criada corretamente:'
 echo '====================================================='
 echo '/etc/passwd:'
-cat /etc/passwd | grep aluno
-echo 'groups:'
-groups aluno
+id aluno
 echo 'link simbólico html (Apache):'
 ls -l /home/aluno/html
 echo 'permissões:'
@@ -342,11 +334,11 @@ rm /home/$USER/html/testphp.php
 echo 'Verifique os arquivos de configuração:'
 echo '======================================'
 echo '/etc/phpmyadmin/config.inc.php'
-cat /etc/phpmyadmin/config.inc.php | grep 'AllowNoPassword'
+cat -n /etc/phpmyadmin/config.inc.php | grep 'AllowNoPassword'
 echo '/etc/apache2/apache2.conf'
-cat /etc/apache2/apache2.conf | grep 'Include /etc/phpmyadmin/apache.conf'
+cat -n /etc/apache2/apache2.conf | grep 'Include /etc/phpmyadmin/apache.conf'
 echo '/etc/php5/apache2/php.ini'
-cat /etc/php5/apache2/php.ini | grep 'extension=mysql.so/extension=mysql.so'
+cat -n /etc/php5/apache2/php.ini | grep 'extension=msql.so'
 read -p 'Enter para continuar: '
 
 echo 'Verifique se o Google é o search engine pro Firefox nas contas "etec" e "aluno"'
