@@ -250,9 +250,9 @@ inxi -F > /home/etec/hardinfo.txt
 
 printf "Verifique as seguintes PPAs (não duplicadas):\n"
 printf "=============================================\n"
-printf "   - ppa:openjdk-r/ppa\n"
-printf "   - ppa:vajdics/netbeans-installer\n"
-printf "   - ppa:webupd8team/sublime-text-3\n"
+printf "   \- ppa:openjdk-r/ppa\n"
+printf "   \- ppa:vajdics/netbeans-installer\n"
+printf "   \- ppa:webupd8team/sublime-text-3\n"
 read -p 'Enter para continuar: '
 inxi -r | grep openjdk-r
 inxi -r | grep netbeans-installer
@@ -267,25 +267,25 @@ read -p 'Enter para continuar: '
 
 printf "Verifique se os seguentes softwares foram instalado e os mesmos estão funcionando corretamente:\n"
 printf "===============================================================================================\n"
-printf "   - Workbench: \n"
+printf "   \- Workbench: \n"
 mysql-workbench --version
-printf "   - Inkscape: \n"
+printf "   \- Inkscape: \n"
 inkscape --version
-printf "   - Gimp: \n"
+printf "   \- Gimp: \n"
 gimp --version
-printf "   - Sublime-Text 3: \n"
+printf "   \- Sublime-Text 3: \n"
 sublime-text --version
-printf "   - Meld: \n"
+printf "   \- Meld: \n"
 meld --version
-printf "   - PyRenamer: \n"
+printf "   \- PyRenamer: \n"
 pyrenamer --version
-printf "   - Dia: \n"
+printf "   \- Dia: \n"
 dia --version
-printf "   - Vim: \n"
+printf "   \- Vim: \n"
 vim --version
-printf "   - Git: \n"
+printf "   \- Git: \n"
 git --version
-printf "   - Netbeans (manual: versão, atualizações, plugins)\n"
+printf "   \- Netbeans (manual: versão, atualizações, plugins)\n"
 netbeans --nosplash &
 
 read -p 'Enter para continuar: '
@@ -302,9 +302,9 @@ read -p 'Enter para continuar: '
 
 printf "Verifique LAMP:\n"
 printf "===============\n"
-printf "- Apache\n"
-printf "- PHP\n"
-printf "- MySQL e phpMyAdmin\n"
+printf "\- Apache\n"
+printf "\- PHP\n"
+printf "\- MySQL e phpMyAdmin\n"
 echo "<?php phpinfo(); ?>" > /home/etec/html/testphp.php
 firefox http://localhost/ http://localhost/testphp.php http://localhost/phpmyadmin 2>/dev/null &
 read -p 'Enter para continuar: '
