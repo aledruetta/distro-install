@@ -206,7 +206,7 @@ if [ ! -s "/etc/phpmyadmin/config.inc.php.bak" ]; then
 	cp /etc/phpmyadmin/config.inc.php /etc/phpmyadmin/config.inc.php.bak
 fi
 
-sed -i -E '/^\s*(\/){2}\s.*AllowNoPassword/s/^(\/){2}\s//' /etc/phpmyadmin/config.inc.php
+sed -i -E '/^\s*(\/){2}\s.*AllowNoPassword/s/^\s*(\/){2}\s//' /etc/phpmyadmin/config.inc.php
 printf "$COLORIDO\n" "[Script] OK..."
 
 printf "$COLORIDO" "[Script] Configurando Apache para acessar phpMyAdmin..."
