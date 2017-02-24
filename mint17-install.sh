@@ -215,7 +215,14 @@ if [ ! -s "/etc/apache2/apache2.conf.bak" ]; then
 	# Backup
 	cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf.bak
 fi
-echo "Include /etc/phpmyadmin/apache.conf" >> /etc/apache2/apache2.conf
+
+include="Include /etc/phpmyadmin/apache.conf"
+saida=$(eval 'grep -n "$include" /etc/apache2/apache2.conf')
+
+if [ -z "$saida" ]; then
+	echo "$include" >> /etc/apache2/apache2.conf
+fi
+echo "$saida"
 printf "$COLORIDO\n" "[Script] OK..."
 
 printf "$COLORIDO" "[Script] Reiniciando Apache..."
@@ -225,7 +232,8 @@ printf "$COLORIDO\n" "[Script] OK..."
 # Conta Aluno
 
 printf "$COLORIDO" "[Script] Criando conta aluno (passwd: 'aluno'...)"
-if [ -z `id aluno` ]; then
+idaluno=`id aluno 2> /dev/null`
+if [ -z $idaluno ]; then
 	adduser aluno
 	adduser aluno www-data
 fi
