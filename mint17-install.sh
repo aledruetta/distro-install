@@ -35,132 +35,133 @@ readonly NETB_PPA_F="/etc/apt/sources.list.d/vajdics-netbeans-installer-trusty.l
 readonly NETB_PPA="ppa:vajdics/netbeans-installer"
 readonly SUB3_PPA_F="/etc/apt/sources.list.d/webupd8team-sublime-text-3-trusty.list"
 readonly SUB3_PPA="ppa:webupd8team/sublime-text-3"
-readonly COLORIDO='\033[1;34m\n%s\n\033[0m'
+readonly COLORIDO='\033[1;34m%s\n\033[0m'
+readonly SCR_TIME="[Script][$(date +%T)]"
 
 # Detectar Sistema Operacional
 
-printf "$COLORIDO" "[Script] Sistema Operacional detectado: $DESCRIPTION ($ARQ_PROC-bit)"
+printf "$COLORIDO" "$SCR_TIME Sistema Operacional detectado: $DESCRIPTION ($ARQ_PROC-bit)"
 
 if [ $DISTRIBUTOR != "LinuxMint" ] || [ $CODENAME != "rosa" ] || \
 	[ $ARQ_PROC -ne 32 ]
 then
-	printf "$COLORIDO" "[Script] Esse script foi escrito para Linux Mint 17.3 Rosa (32-bit)"
-	printf "$COLORIDO" "[Script] O sistema é incompatível!"
+	printf "$COLORIDO" "$SCR_TIME Esse script foi escrito para Linux Mint 17.3 Rosa (32-bit)"
+	printf "$COLORIDO" "$SCR_TIME O sistema é incompatível!"
 	exit 1
 fi
 
 # Superusuário
 
-printf "$COLORIDO" "[Script] Superusuário?"
+printf "$COLORIDO" "$SCR_TIME Superusuário?"
 
 if [ `id -u` -ne 0 ]; then
-	printf "$COLORIDO" "[Script] El script debe ser executado como superusuário (sudo)!"
+	printf "$COLORIDO" "$SCR_TIME El script debe ser executado como superusuário (sudo)!"
 	exit 1
 fi
 
 # Atualizar pacotes
 
-printf "$COLORIDO" "[Script] Atualizando repositórios da distribuição..."
+printf "$COLORIDO" "$SCR_TIME Atualizando repositórios da distribuição..."
 apt-get update
 
-printf "$COLORIDO" "[Script] Atualizando os pacotes..."
+printf "$COLORIDO" "$SCR_TIME Atualizando os pacotes..."
 apt-get upgrade -y
 
 # Codecs e ferramentas de compilador
 
-printf "$COLORIDO" "[Script] Instalando codecs e ferramentas de compilador..."
+printf "$COLORIDO" "$SCR_TIME Instalando codecs e ferramentas de compilador..."
 apt-get install ubuntu-restricted-extras build-essential -y
 
 # PPA's
 
 if [ ! -s "$JDK_PPA_F" ]; then		# Java
-	printf "$COLORIDO" "[Script] Adicionando repositório de terceiros..."
+	printf "$COLORIDO" "$SCR_TIME Adicionando repositório de terceiros..."
 	apt-add-repository $JDK_PPA -y
 else
-	printf "$COLORIDO" "[Script] $JDK_PPA já existe"
+	printf "$COLORIDO" "$SCR_TIME $JDK_PPA já existe"
 fi
 
 if [ ! -s "$NETB_PPA_F" ]; then		# Netbeans
-	printf "$COLORIDO" "[Script] Adicionando repositório de terceiros..."
+	printf "$COLORIDO" "$SCR_TIME Adicionando repositório de terceiros..."
 	# add-apt-repository $NETB_PPA -y
 else
-	printf "$COLORIDO" "[Script] $NETB_PPA já existe"
+	printf "$COLORIDO" "$SCR_TIME $NETB_PPA já existe"
 fi
 
 if [ ! -s "$SUB3_PPA_F" ]; then		# Sublime-Text
-	printf "$COLORIDO" "[Script] Adicionando repositório de terceiros..."
+	printf "$COLORIDO" "$SCR_TIME Adicionando repositório de terceiros..."
 	add-apt-repository $SUB3_PPA -y
 else
-	printf "$COLORIDO" "[Script] $SUB3_PPA já existe"
+	printf "$COLORIDO" "$SCR_TIME $SUB3_PPA já existe"
 fi
 
-printf "$COLORIDO" "[Script] Atualizando caché do repositório..."
+printf "$COLORIDO" "$SCR_TIME Atualizando caché do repositório..."
 apt-get update
 
 # Java OpenJDK 8
 
-printf "$COLORIDO" "[Script] Instalando Java OpenJDK 8..."
+printf "$COLORIDO" "$SCR_TIME Instalando Java OpenJDK 8..."
 apt-get install openjdk-8-jdk -y
 
-printf "$COLORIDO" "[Script] Selecionando a versão 8 do OpenJDK..."
+printf "$COLORIDO" "$SCR_TIME Selecionando a versão 8 do OpenJDK..."
 printf "2" | update-alternatives --config java
 
-printf "$COLORIDO" "[Script] Verificando versão OpenJDK..."
+printf "$COLORIDO" "$SCR_TIME Verificando versão OpenJDK..."
 java -version
 javac -version
 
 # Netbeans IDE 8.1
 
-printf "$COLORIDO" "[Script] Instalando Netbeans 8.1 IDE..."
+printf "$COLORIDO" "$SCR_TIME Instalando Netbeans 8.1 IDE..."
 # apt-get install netbeans-installer -y
 
 # Sublime Text
 
-printf "$COLORIDO" "[Script] Instalando Sublime Text 3..."
+printf "$COLORIDO" "$SCR_TIME Instalando Sublime Text 3..."
 apt-get install sublime-text -y
 
 # Aplicativos
 
-printf "$COLORIDO" "[Script] Instalando Aplicativos:"
-printf "$COLORIDO" "[Script] - git (Controle de versões)"
+printf "$COLORIDO" "$SCR_TIME Instalando Aplicativos:"
+printf "$COLORIDO" "$SCR_TIME - git (Controle de versões)"
 apt-get install git -y
-printf "$COLORIDO" "[Script] - vim (Editor de texto)"
+printf "$COLORIDO" "$SCR_TIME - vim (Editor de texto)"
 apt-get install vim -y
-printf "$COLORIDO" "[Script] - inkscape (Disenho vetorial)"
+printf "$COLORIDO" "$SCR_TIME - inkscape (Disenho vetorial)"
 apt-get install inkscape -y
-printf "$COLORIDO" "[Script] - dia (Diagramas)"
+printf "$COLORIDO" "$SCR_TIME - dia (Diagramas)"
 apt-get install dia -y
-printf "$COLORIDO" "[Script] - meld (Comparador de arquivos)"
+printf "$COLORIDO" "$SCR_TIME - meld (Comparador de arquivos)"
 apt-get install meld -y
-printf "$COLORIDO" "[Script] - mysql-workbench (Administração de DB)"
+printf "$COLORIDO" "$SCR_TIME - mysql-workbench (Administração de DB)"
 apt-get install mysql-workbench -y
-printf "$COLORIDO" "[Script] - pyrenamer (Renomear arquivos em lote)"
+printf "$COLORIDO" "$SCR_TIME - pyrenamer (Renomear arquivos em lote)"
 apt-get install pyrenamer -y
 
 # LAMP - Apache
 
-printf "$COLORIDO" "[Script] Instalando servidor Apache..."
+printf "$COLORIDO" "$SCR_TIME Instalando servidor Apache..."
 apt-get install apache2 -y
 
-printf "$COLORIDO" "[Script] Mudando as permisões de /var/www/html..."
+printf "$COLORIDO" "$SCR_TIME Mudando as permisões de /var/www/html..."
 chown -R etec.www-data /var/www/html
 chmod -R 775 /var/www/html
 
-printf "$COLORIDO" "[Script] Criando link simbólico na home do usuário 'etec'..."
+printf "$COLORIDO" "$SCR_TIME Criando link simbólico na home do usuário 'etec'..."
 ln -s /var/www/html /home/etec
 
 # LAMP - PHP
 
-printf "$COLORIDO" "[Script] Instalando linguagem de programação PHP..."
+printf "$COLORIDO" "$SCR_TIME Instalando linguagem de programação PHP..."
 apt-get install php5 libapache2-mod-php5 -y
 
 # LAMP - MySQL
 
-printf "$COLORIDO" "[Script] Instalando banco de dados MySQL..."
+printf "$COLORIDO" "$SCR_TIME Instalando banco de dados MySQL..."
 apt-get install mysql-server -y
 apt-get install libapache2-mod-auth-mysql php5-mysql phpmyadmin -y
 
-printf "$COLORIDO" "[Script] Configurando PHP para trabalhar com MySQL..."
+printf "$COLORIDO" "$SCR_TIME Configurando PHP para trabalhar com MySQL..."
 
 if [ ! -s "/etc/php5/apache2/php.ini.bak" ]; then
 	# Backup
@@ -169,12 +170,12 @@ fi
 
 sed -i -E '/^;\s*extension=msql\.so/s/^;\s*//' /etc/php5/apache2/php.ini
 
-printf "$COLORIDO" "[Script] Reiniciando Apache..."
+printf "$COLORIDO" "$SCR_TIME Reiniciando Apache..."
 /etc/init.d/apache2 restart
 
 # LAMP - phpMyAdmin
 
-printf "$COLORIDO" "[Script] Configurando phpMyAdmin para acessar sem senha..."
+printf "$COLORIDO" "$SCR_TIME Configurando phpMyAdmin para acessar sem senha..."
 
 if [ ! -s "/etc/phpmyadmin/config.inc.php.bak" ]; then
 	# Backup
@@ -183,7 +184,7 @@ fi
 
 sed -i -E '/^\s*(\/){2}\s.*AllowNoPassword/s/^\s*(\/){2}\s//' /etc/phpmyadmin/config.inc.php
 
-printf "$COLORIDO" "[Script] Configurando Apache para acessar phpMyAdmin..."
+printf "$COLORIDO" "$SCR_TIME Configurando Apache para acessar phpMyAdmin..."
 
 if [ ! -s "/etc/apache2/apache2.conf.bak" ]; then
 	# Backup
@@ -198,25 +199,25 @@ if [ -z "$saida" ]; then
 fi
 echo "$saida"
 
-printf "$COLORIDO" "[Script] Reiniciando Apache..."
+printf "$COLORIDO" "$SCR_TIME Reiniciando Apache..."
 /etc/init.d/apache2 restart
 
 # Conta Aluno
 
-printf "$COLORIDO" "[Script] Criando conta aluno (passwd: 'aluno'...)"
+printf "$COLORIDO" "$SCR_TIME Criando conta aluno (passwd: 'aluno'...)"
 idaluno=`id aluno 2> /dev/null`
 if [ -z $idaluno ]; then
 	adduser aluno
 	adduser aluno www-data
 fi
 
-printf "$COLORIDO" "[Script] Criando link simbólico na home do aluno para /var/www/html..."
+printf "$COLORIDO" "$SCR_TIME Criando link simbólico na home do aluno para /var/www/html..."
 ln -s /var/www/html /home/aluno
 
 # Atalhos escritório
 
 # Aplicativos dos quais serão criados atalhos
-printf "$COLORIDO" "[Script] Criando atalhos pro escritório..."
+printf "$COLORIDO" "$SCR_TIME Criando atalhos pro escritório..."
 apps=('/usr/share/applications/gcalctool.desktop'
 '/usr/share/applications/libreoffice-writer.desktop'
 '/usr/share/applications/libreoffice-calc.desktop'
@@ -230,17 +231,18 @@ apps=('/usr/share/applications/gcalctool.desktop'
 '/usr/share/applications/netbeans.desktop'
 '/usr/share/applications/mysql-workbench.desktop')
 
-printf "$COLORIDO" "[Script] Mudando o proprietário e as permissões da área de trabalho do usuário"
+printf "$COLORIDO" "$SCR_TIME Mudando o proprietário e as permissões da área de trabalho do usuário"
+mkdir /home/aluno/Área\ de\ Trabalho/
 sudo chown etec:etec /home/aluno/Área\ de\ Trabalho/
 sudo chmod 1755 /home/aluno/Área\ de\ Trabalho/ /home/etec/Área\ de\ Trabalho/
 
-printf "$COLORIDO" "[Script] Copiando e configurando atalhos"
+printf "$COLORIDO" "$SCR_TIME Copiando e configurando atalhos"
 sudo cp ${apps[@]} /home/aluno/Área\ de\ Trabalho/
 sudo cp ${apps[@]} /home/etec/Área\ de\ Trabalho/
 sudo chown etec:etec /home/aluno/Área\ de\ Trabalho/*.desktop /home/etec/Área\ de\ Trabalho/*.desktop
 sudo chmod 755 /home/aluno/Área\ de\ Trabalho/*.desktop /home/etec/Área\ de\ Trabalho/*.desktop
 
-printf "$COLORIDO" "[Script] Criando arquivo de texto na home com especificações do hardware..."
+printf "$COLORIDO" "$SCR_TIME Criando arquivo de texto na home com especificações do hardware..."
 inxi -F > /home/etec/hardinfo.txt
 
 # Testes
