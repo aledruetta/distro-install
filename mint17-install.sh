@@ -74,21 +74,21 @@ apt-get install ubuntu-restricted-extras build-essential -y
 # PPA's
 
 if [ ! -s "$JDK_PPA_F" ]; then		# Java
-	printf "$COLORIDO" "[Script][$(date +%T)] Adicionando repositório de terceiros..."
+	printf "$COLORIDO" "[Script][$(date +%T)] Adicionando repositório de terceiros $JDK_PPA..."
 	apt-add-repository $JDK_PPA -y
 else
 	printf "$COLORIDO" "[Script][$(date +%T)] $JDK_PPA já existe"
 fi
 
 if [ ! -s "$NETB_PPA_F" ]; then		# Netbeans
-	printf "$COLORIDO" "[Script][$(date +%T)] Adicionando repositório de terceiros..."
+	printf "$COLORIDO" "[Script][$(date +%T)] Adicionando repositório de terceiros $NETB_PPA..."
 	# add-apt-repository $NETB_PPA -y
 else
 	printf "$COLORIDO" "[Script][$(date +%T)] $NETB_PPA já existe"
 fi
 
 if [ ! -s "$SUB3_PPA_F" ]; then		# Sublime-Text
-	printf "$COLORIDO" "[Script][$(date +%T)] Adicionando repositório de terceiros..."
+	printf "$COLORIDO" "[Script][$(date +%T)] Adicionando repositório de terceiros $SUB3_PPA..."
 	add-apt-repository $SUB3_PPA -y
 else
 	printf "$COLORIDO" "[Script][$(date +%T)] $SUB3_PPA já existe"
@@ -203,8 +203,9 @@ printf "$COLORIDO" "[Script][$(date +%T)] Reiniciando Apache..."
 
 # Conta Aluno
 
+# to-do list --> corrigir entrada de dados
 printf "$COLORIDO" "[Script][$(date +%T)] Criando conta aluno (passwd: 'aluno'...)"
-idaluno=`id aluno 2> /dev/null`
+idaluno=$(id aluno 2> /dev/null)
 if [ -z $idaluno ]; then
 	adduser aluno
 	adduser aluno www-data
@@ -241,7 +242,8 @@ sudo cp ${apps[@]} /home/etec/Área\ de\ Trabalho/
 sudo chown etec:etec /home/aluno/Área\ de\ Trabalho/*.desktop /home/etec/Área\ de\ Trabalho/*.desktop
 sudo chmod 755 /home/aluno/Área\ de\ Trabalho/*.desktop /home/etec/Área\ de\ Trabalho/*.desktop
 
-printf "$COLORIDO" "[Script][$(date +%T)] Criando arquivo de texto na home com especificações do hardware..."
+# To-do list --> regex limpar terminal colorido
+printf "$COLORIDO" "[Script][$(date +%T)] Criando relatório na home com especificações do hardware..."
 inxi -F > /home/etec/hardinfo.txt
 
 # Testes
