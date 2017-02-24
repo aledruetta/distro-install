@@ -233,18 +233,21 @@ apps=('/usr/share/applications/gcalctool.desktop'
 
 printf "$COLORIDO" "[Script][$(date +%T)] Mudando o proprietário e as permissões da área de trabalho do usuário"
 mkdir /home/aluno/Área\ de\ Trabalho/
-sudo chown etec:etec /home/aluno/Área\ de\ Trabalho/
-sudo chmod 1755 /home/aluno/Área\ de\ Trabalho/ /home/etec/Área\ de\ Trabalho/
+chown etec.etec /home/aluno/Área\ de\ Trabalho/
+chmod 1755 /home/aluno/Área\ de\ Trabalho/ /home/etec/Área\ de\ Trabalho/
 
 printf "$COLORIDO" "[Script][$(date +%T)] Copiando e configurando atalhos"
-sudo cp ${apps[@]} /home/aluno/Área\ de\ Trabalho/
-sudo cp ${apps[@]} /home/etec/Área\ de\ Trabalho/
-sudo chown etec:etec /home/aluno/Área\ de\ Trabalho/*.desktop /home/etec/Área\ de\ Trabalho/*.desktop
-sudo chmod 755 /home/aluno/Área\ de\ Trabalho/*.desktop /home/etec/Área\ de\ Trabalho/*.desktop
+cp ${apps[@]} /home/aluno/Área\ de\ Trabalho/
+cp ${apps[@]} /home/etec/Área\ de\ Trabalho/
+chown etec.etec /home/aluno/Área\ de\ Trabalho/*.desktop /home/etec/Área\ de\ Trabalho/*.desktop
+chmod 755 /home/aluno/Área\ de\ Trabalho/*.desktop /home/etec/Área\ de\ Trabalho/*.desktop
 
 # To-do list --> regex limpar terminal colorido
 printf "$COLORIDO" "[Script][$(date +%T)] Criando relatório na home com especificações do hardware..."
 inxi -F > /home/etec/hardinfo.txt
+
+# Garantindo permissões pro Firefox
+chown -R etec.etec /home/etec/.cache/mozilla
 
 # Testes
 
