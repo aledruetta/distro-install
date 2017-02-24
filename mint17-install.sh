@@ -162,12 +162,12 @@ apt-get install apache2 -y
 printf "$COLORIDO\n" "[Script] OK..."
 
 printf "$COLORIDO" "[Script] Mudando as permisões de /var/www/html..."
-chown -R $USER.www-data /var/www/html
+chown -R etec.www-data /var/www/html
 chmod -R 775 /var/www/html
 printf "$COLORIDO\n" "[Script] OK..."
 
-printf "$COLORIDO" "[Script] Criando link simbólico na home do usuário '$USER'..."
-ln -s /var/www/html /home/$USER
+printf "$COLORIDO" "[Script] Criando link simbólico na home do usuário 'etec'..."
+ln -s /var/www/html /home/etec
 printf "$COLORIDO\n" "[Script] OK..."
 
 # LAMP - PHP
@@ -274,7 +274,7 @@ sudo chmod 755 /home/aluno/Área\ de\ Trabalho/*.desktop /home/etec/Área\ de\ T
 printf "$COLORIDO\n" "[Script] OK..."
 
 printf "$COLORIDO" "[Script] Criando arquivo de texto na home com especificações do hardware..."
-inxi -F > /home/$USER/hardinfo.txt
+inxi -F > /home/etec/hardinfo.txt
 printf "$COLORIDO\n" "[Script] OK..."
 
 # Testes
@@ -336,10 +336,10 @@ printf "===============\n"
 printf "- Apache\n"
 printf "- PHP\n"
 printf "- MySQL e phpMyAdmin\n"
-echo "<?php phpinfo(); ?>" > /home/$USER/html/testphp.php
+echo "<?php phpinfo(); ?>" > /home/etec/html/testphp.php
 firefox http://localhost/ http://localhost/testphp.php http://localhost/phpmyadmin 2>/dev/null &
 read -p 'Enter para continuar: '
-rm /home/$USER/html/testphp.php
+rm /home/etec/html/testphp.php
 
 printf "Verifique os arquivos de configuração:\n"
 printf "======================================\n"
@@ -357,5 +357,5 @@ read -p 'Enter para continuar: '
 
 printf "Verifique se o relatório de hardware foi criado na home:\n"
 printf "========================================================\n"
-cat /home/$USER/hardinfo.txt
+cat /home/etec/hardinfo.txt
 read -p 'Enter para continuar: '
