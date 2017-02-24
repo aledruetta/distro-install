@@ -39,151 +39,151 @@ readonly SCRIPT='\033[1;34m%s\n\033[0m'
 
 # Detectar Sistema Operacional
 
-printf "$SCRIPT" "[Script]Sistema Operacional detectado: $DESCRIPTION ($ARQ_PROC-bit)"
+printf "$SCRIPT" "[Script] Sistema Operacional detectado: $DESCRIPTION ($ARQ_PROC-bit)"
 
 if [ $DISTRIBUTOR != "LinuxMint" ] || [ $CODENAME != "rosa" ] || \
 	[ $ARQ_PROC -ne 32 ]
 then
-	printf "$SCRIPT" "[Script]Esse script foi escrito para Linux Mint 17.3 Rosa (32-bit)"
-	printf "$SCRIPT" "[Script]O sistema é incompatível!"
+	printf "$SCRIPT" "[Script] Esse script foi escrito para Linux Mint 17.3 Rosa (32-bit)"
+	printf "$SCRIPT" "[Script] O sistema é incompatível!"
 	exit 1
 fi
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
 # Superusuário
 
-printf "$SCRIPT" "[Script]Superusuário?"
+printf "$SCRIPT" "[Script] Superusuário?"
 
 if [ `id -u` -ne 0 ]; then
-	printf "$SCRIPT" "[Script]El script debe ser executado como superusuário (sudo)!"
+	printf "$SCRIPT" "[Script] El script debe ser executado como superusuário (sudo)!"
 	exit 1
 fi
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
 # Atualizar pacotes
 
-printf "$SCRIPT" "[Script]Atualizando repositórios da distribuição..."
+printf "$SCRIPT" "[Script] Atualizando repositórios da distribuição..."
 apt-get update
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
-printf "$SCRIPT" "[Script]Atualizando os pacotes..."
+printf "$SCRIPT" "[Script] Atualizando os pacotes..."
 apt-get upgrade -y
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
 # Codecs e ferramentas de compilador
 
-printf "$SCRIPT" "[Script]Instalando codecs e ferramentas de compilador..."
+printf "$SCRIPT" "[Script] Instalando codecs e ferramentas de compilador..."
 apt-get install ubuntu-restricted-extras build-essential -y
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
 # PPA's
 
 if [ ! -s "$JDK_PPA_F" ]; then		# Java
-	printf "$SCRIPT" "[Script]Adicionando repositório de terceiros..."
+	printf "$SCRIPT" "[Script] Adicionando repositório de terceiros..."
 	apt-add-repository $JDK_PPA -y
-	printf "$SCRIPT\n" "[Script]OK..."
+	printf "$SCRIPT\n" "[Script] OK..."
 else
-	printf "$SCRIPT" "[Script]$JDK_PPA já existe"
-	printf "$SCRIPT\n" "[Script]OK..."
+	printf "$SCRIPT" "[Script] $JDK_PPA já existe"
+	printf "$SCRIPT\n" "[Script] OK..."
 fi
 
 if [ ! -s "$NETB_PPA_F" ]; then		# Netbeans
-	printf "$SCRIPT" "[Script]Adicionando repositório de terceiros..."
-	add-apt-repository $NETB_PPA -y
-	printf "$SCRIPT\n" "[Script]OK..."
+	printf "$SCRIPT" "[Script] Adicionando repositório de terceiros..."
+	# add-apt-repository $NETB_PPA -y
+	printf "$SCRIPT\n" "[Script] OK..."
 else
-	printf "$SCRIPT" "[Script]$NETB_PPA já existe"
-	printf "$SCRIPT\n" "[Script]OK..."
+	printf "$SCRIPT" "[Script] $NETB_PPA já existe"
+	printf "$SCRIPT\n" "[Script] OK..."
 fi
 
 if [ ! -s "$SUB3_PPA_F" ]; then		# Sublime-Text
-	printf "$SCRIPT" "[Script]Adicionando repositório de terceiros..."
+	printf "$SCRIPT" "[Script] Adicionando repositório de terceiros..."
 	add-apt-repository $SUB3_PPA -y
-	printf "$SCRIPT\n" "[Script]OK..."
+	printf "$SCRIPT\n" "[Script] OK..."
 else
-	printf "$SCRIPT" "[Script]$SUB3_PPA já existe"
-	printf "$SCRIPT\n" "[Script]OK..."
+	printf "$SCRIPT" "[Script] $SUB3_PPA já existe"
+	printf "$SCRIPT\n" "[Script] OK..."
 fi
 
-printf "$SCRIPT" "[Script]Atualizando caché do repositório..."
+printf "$SCRIPT" "[Script] Atualizando caché do repositório..."
 apt-get update
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
 # Java OpenJDK 8
 
-printf "$SCRIPT" "[Script]Instalando Java OpenJDK 8..."
+printf "$SCRIPT" "[Script] Instalando Java OpenJDK 8..."
 apt-get install openjdk-8-jdk -y
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
-printf "$SCRIPT" "[Script]Selecionando a versão 8 do OpenJDK..."
+printf "$SCRIPT" "[Script] Selecionando a versão 8 do OpenJDK..."
 printf "2" | update-alternatives --config java
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
-printf "$SCRIPT" "[Script]Verificando versão OpenJDK..."
+printf "$SCRIPT" "[Script] Verificando versão OpenJDK..."
 java -version
 javac -version
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
 # Netbeans IDE 8.1
 
-printf "$SCRIPT" "[Script]Instalando Netbeans 8.1 IDE..."
-apt-get install netbeans-installer -y
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT" "[Script] Instalando Netbeans 8.1 IDE..."
+# apt-get install netbeans-installer -y
+printf "$SCRIPT\n" "[Script] OK..."
 
 # Sublime Text
 
-printf "$SCRIPT" "[Script]Instalando Sublime Text 3..."
+printf "$SCRIPT" "[Script] Instalando Sublime Text 3..."
 apt-get install sublime-text -y
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
 # Aplicativos
 
-printf "$SCRIPT" "[Script]Instalando Aplicativos:"
-printf "$SCRIPT" "[Script]- git (Controle de versões)"
+printf "$SCRIPT" "[Script] Instalando Aplicativos:"
+printf "$SCRIPT" "[Script] - git (Controle de versões)"
 apt-get install git -y
-printf "$SCRIPT" "[Script]- vim (Editor de texto)"
+printf "$SCRIPT" "[Script] - vim (Editor de texto)"
 apt-get install vim -y
-printf "$SCRIPT" "[Script]- inkscape (Disenho vetorial)"
+printf "$SCRIPT" "[Script] - inkscape (Disenho vetorial)"
 apt-get install inkscape -y
-printf "$SCRIPT" "[Script]- dia (Diagramas)"
+printf "$SCRIPT" "[Script] - dia (Diagramas)"
 apt-get install dia -y
-printf "$SCRIPT" "[Script]- meld (Comparador de arquivos)"
+printf "$SCRIPT" "[Script] - meld (Comparador de arquivos)"
 apt-get install meld -y
-printf "$SCRIPT" "[Script]- mysql-workbench (Administração de DB)"
+printf "$SCRIPT" "[Script] - mysql-workbench (Administração de DB)"
 apt-get install mysql-workbench -y
-printf "$SCRIPT" "[Script]- pyrenamer (Renomear arquivos em lote)"
+printf "$SCRIPT" "[Script] - pyrenamer (Renomear arquivos em lote)"
 apt-get install pyrenamer -y
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
 # LAMP - Apache
 
-printf "$SCRIPT" "[Script]Instalando servidor Apache..."
+printf "$SCRIPT" "[Script] Instalando servidor Apache..."
 apt-get install apache2 -y
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
-printf "$SCRIPT" "[Script]Mudando as permisões de /var/www/html..."
+printf "$SCRIPT" "[Script] Mudando as permisões de /var/www/html..."
 chown -R $USER.www-data /var/www/html
 chmod -R 775 /var/www/html
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
-printf "$SCRIPT" "[Script]Criando link simbólico na home..."
+printf "$SCRIPT" "[Script] Criando link simbólico na home..."
 ln -s /var/www/html /home/$USER
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
 # LAMP - PHP
 
-printf "$SCRIPT" "[Script]Instalando linguagem de programação PHP..."
+printf "$SCRIPT" "[Script] Instalando linguagem de programação PHP..."
 apt-get install php5 libapache2-mod-php5 -y
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
 # LAMP - MySQL
 
-printf "$SCRIPT" "[Script]Instalando banco de dados MySQL..."
+printf "$SCRIPT" "[Script] Instalando banco de dados MySQL..."
 apt-get install mysql-server -y
 apt-get install libapache2-mod-auth-mysql php5-mysql phpmyadmin -y
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
-printf "$SCRIPT" "[Script]Configurando PHP para trabalhar com MySQL..."
+printf "$SCRIPT" "[Script] Configurando PHP para trabalhar com MySQL..."
 
 if [ ! -s "/etc/php5/apache2/php.ini.bak" ]; then
 	# Backup
@@ -191,15 +191,15 @@ if [ ! -s "/etc/php5/apache2/php.ini.bak" ]; then
 fi
 
 sed -i -E '/^;\s*extension=msql\.so/s/^;\s*//' /etc/php5/apache2/php.ini
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
-printf "$SCRIPT" "[Script]Reiniciando Apache..."
+printf "$SCRIPT" "[Script] Reiniciando Apache..."
 /etc/init.d/apache2 restart
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
 # LAMP - phpMyAdmin
 
-printf "$SCRIPT" "[Script]Configurando phpMyAdmin para acessar sem senha..."
+printf "$SCRIPT" "[Script] Configurando phpMyAdmin para acessar sem senha..."
 
 if [ ! -s "/etc/phpmyadmin/config.inc.php.bak" ]; then
 	# Backup
@@ -207,36 +207,36 @@ if [ ! -s "/etc/phpmyadmin/config.inc.php.bak" ]; then
 fi
 
 sed -i -E '/^\s*(\/){2}\s.*AllowNoPassword/s/^(\/){2}\s//' /etc/phpmyadmin/config.inc.php
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
-printf "$SCRIPT" "[Script]Configurando Apache para acessar phpMyAdmin..."
+printf "$SCRIPT" "[Script] Configurando Apache para acessar phpMyAdmin..."
 
 if [ ! -s "/etc/apache2/apache2.conf.bak" ]; then
 	# Backup
 	cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf.bak
 fi
 sudo printf "Include /etc/phpmyadmin/apache.conf" >> /etc/apache2/apache2.conf
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
-printf "$SCRIPT" "[Script]Reiniciando Apache..."
+printf "$SCRIPT" "[Script] Reiniciando Apache..."
 /etc/init.d/apache2 restart
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
 # Conta Aluno
 
-printf "$SCRIPT" "[Script]Criando conta aluno (passwd: 'aluno'...)"
+printf "$SCRIPT" "[Script] Criando conta aluno (passwd: 'aluno'...)"
 adduser aluno
 adduser aluno www-data
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
-printf "$SCRIPT" "[Script]Criando link simbólico na home do aluno para /var/www/html..."
+printf "$SCRIPT" "[Script] Criando link simbólico na home do aluno para /var/www/html..."
 ln -s /var/www/html /home/aluno
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
 # Atalhos escritório
 
 # Aplicativos dos quais serão criados atalhos
-printf "$SCRIPT" "[Script]Criando atalhos pro escritório..."
+printf "$SCRIPT" "[Script] Criando atalhos pro escritório..."
 apps=('/usr/share/applications/gcalctool.desktop'
 '/usr/share/applications/libreoffice-writer.desktop'
 '/usr/share/applications/libreoffice-calc.desktop'
@@ -249,23 +249,23 @@ apps=('/usr/share/applications/gcalctool.desktop'
 '/usr/share/applications/sublime_text.desktop'
 '/usr/share/applications/netbeans.desktop'
 '/usr/share/applications/mysql-workbench.desktop')
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
-printf "$SCRIPT" "[Script]Mudando o proprietário e as permissões da área de trabalho do usuário"
+printf "$SCRIPT" "[Script] Mudando o proprietário e as permissões da área de trabalho do usuário"
 sudo chown etec:etec /home/aluno/Área\ de\ Trabalho/
 sudo chmod 1755 /home/aluno/Área\ de\ Trabalho/ /home/etec/Área\ de\ Trabalho/
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
-printf "$SCRIPT" "[Script]Copiando e configurando atalhos"
+printf "$SCRIPT" "[Script] Copiando e configurando atalhos"
 sudo cp ${apps[@]} /home/aluno/Área\ de\ Trabalho/
 sudo cp ${apps[@]} /home/etec/Área\ de\ Trabalho/
 sudo chown etec:etec /home/aluno/Área\ de\ Trabalho/*.desktop /home/etec/Área\ de\ Trabalho/*.desktop
 sudo chmod 755 /home/aluno/Área\ de\ Trabalho/*.desktop /home/etec/Área\ de\ Trabalho/*.desktop
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
-printf "$SCRIPT" "[Script]Criando arquivo de texto na home com especificações do hardware..."
+printf "$SCRIPT" "[Script] Criando arquivo de texto na home com especificações do hardware..."
 inxi -F > /home/$USER/hardinfo.txt
-printf "$SCRIPT\n" "[Script]OK..."
+printf "$SCRIPT\n" "[Script] OK..."
 
 # Testes
 
