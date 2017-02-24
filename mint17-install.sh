@@ -166,7 +166,7 @@ chown -R $USER.www-data /var/www/html
 chmod -R 775 /var/www/html
 printf "$COLORIDO\n" "[Script] OK..."
 
-printf "$COLORIDO" "[Script] Criando link simbólico na home..."
+printf "$COLORIDO" "[Script] Criando link simbólico na home do usuário '$USER'..."
 ln -s /var/www/html /home/$USER
 printf "$COLORIDO\n" "[Script] OK..."
 
@@ -215,7 +215,7 @@ if [ ! -s "/etc/apache2/apache2.conf.bak" ]; then
 	# Backup
 	cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf.bak
 fi
-sudo printf "Include /etc/phpmyadmin/apache.conf" >> /etc/apache2/apache2.conf
+echo "Include /etc/phpmyadmin/apache.conf" >> /etc/apache2/apache2.conf
 printf "$COLORIDO\n" "[Script] OK..."
 
 printf "$COLORIDO" "[Script] Reiniciando Apache..."
@@ -225,8 +225,10 @@ printf "$COLORIDO\n" "[Script] OK..."
 # Conta Aluno
 
 printf "$COLORIDO" "[Script] Criando conta aluno (passwd: 'aluno'...)"
-adduser aluno
-adduser aluno www-data
+if [ -z `id aluno` ]; then
+	adduser aluno
+	adduser aluno www-data
+fi
 printf "$COLORIDO\n" "[Script] OK..."
 
 printf "$COLORIDO" "[Script] Criando link simbólico na home do aluno para /var/www/html..."
@@ -269,84 +271,83 @@ printf "$COLORIDO\n" "[Script] OK..."
 
 # Testes
 
-printf "Verifique as seguintes PPAs (não duplicadas):"
-printf "============================================="
-printf "   - ppa:openjdk-r/ppa"
-printf "   - ppa:vajdics/netbeans-installer"
-printf "   - ppa:webupd8team/sublime-text-3"
+printf "Verifique as seguintes PPAs (não duplicadas):\n"
+printf "=============================================\n"
+printf "   - ppa:openjdk-r/ppa\n"
+printf "   - ppa:vajdics/netbeans-installer\n"
+printf "   - ppa:webupd8team/sublime-text-3\n"
 read -p 'Enter para continuar: '
 inxi -r | grep openjdk-r
 inxi -r | grep netbeans-installer
 inxi -r | grep webupd8team
 read -p 'Enter para continuar: '
 
-printf "Verifique a versão do Java:"
-printf "==========================="
+printf "Verifique a versão do Java:\n"
+printf "===========================\n"
 java -version
 javac -version
 read -p 'Enter para continuar: '
 
-printf "Verifique se os seguentes softwares foram instalado e os mesmos estão funcionando corretamente:"
-printf "==============================================================================================="
-printf "   - Workbench: "
+printf "Verifique se os seguentes softwares foram instalado e os mesmos estão funcionando corretamente:\n"
+printf "===============================================================================================\n"
+printf "   - Workbench: \n"
 mysql-workbench --version
-printf "   - Inkscape: "
+printf "   - Inkscape: \n"
 inkscape --version
-printf "   - Gimp: "
+printf "   - Gimp: \n"
 gimp --version
-printf "   - Sublime-Text 3: "
+printf "   - Sublime-Text 3: \n"
 sublime-text --version
-printf "   - Meld: "
+printf "   - Meld: \n"
 meld --version
-printf "   - PyRenamer: "
+printf "   - PyRenamer: \n"
 pyrenamer --version
-printf "   - Dia: "
+printf "   - Dia: \n"
 dia --version
-printf "   - Vim: "
+printf "   - Vim: \n"
 vim --version
-printf "   - Git: "
+printf "   - Git: \n"
 git --version
-printf "   - Netbeans (manual: versão, atualizações, plugins)"
+printf "   - Netbeans (manual: versão, atualizações, plugins)\n"
 netbeans --nosplash &
 
 read -p 'Enter para continuar: '
 
-printf "Verifique se a conta 'aluno' foi criada corretamente:"
-printf "====================================================="
-printf "/etc/passwd:"
+printf "Verifique se a conta 'aluno' foi criada corretamente:\n"
+printf "=====================================================\n"
+printf "/etc/passwd:\n"
 id aluno
-printf "link simbólico html (Apache):"
+printf "link simbólico html (Apache):\n"
 ls -l /home/aluno/html
-printf "permissões:"
+printf "permissões:\n"
 ls -ld /var/www/html
 read -p 'Enter para continuar: '
 
-printf "===================="
-printf "Verifique:"
-printf "- Apache"
-printf "- PHP"
-printf "- MySQL e phpMyAdmin"
-printf "===================="
-printf "<?php phpinfo(); ?>" > /home/$USER/html/testphp.php
+printf "Verifique LAMP:\n"
+printf "===============\n"
+printf "- Apache\n"
+printf "- PHP\n"
+printf "- MySQL e phpMyAdmin\n"
+echo "<?php phpinfo(); ?>" > /home/$USER/html/testphp.php
 firefox http://localhost/ http://localhost/testphp.php http://localhost/phpmyadmin 2>/dev/null &
 read -p 'Enter para continuar: '
 rm /home/$USER/html/testphp.php
 
-printf "Verifique os arquivos de configuração:"
-printf "======================================"
-printf "/etc/phpmyadmin/config.inc.php"
+printf "Verifique os arquivos de configuração:\n"
+printf "======================================\n"
+printf "/etc/phpmyadmin/config.inc.php\n"
 cat -n /etc/phpmyadmin/config.inc.php | grep 'AllowNoPassword'
-printf "/etc/apache2/apache2.conf"
+printf "/etc/apache2/apache2.conf\n"
 cat -n /etc/apache2/apache2.conf | grep 'Include /etc/phpmyadmin/apache.conf'
-printf "/etc/php5/apache2/php.ini"
+printf "/etc/php5/apache2/php.ini\n"
 cat -n /etc/php5/apache2/php.ini | grep 'extension=msql.so'
 read -p 'Enter para continuar: '
 
-printf "Verifique se o Google é o search engine pro Firefox nas contas 'etec' e 'aluno'"
-printf "==============================================================================="
+printf "Verifique se o Google é o search engine pro Firefox nas contas 'etec' e 'aluno'\n"
+printf "===============================================================================\n"
 read -p 'Enter para continuar: '
 
-printf "Verifique se o relatório de hardware foi criado na home:"
-printf "========================================================"
+printf "Verifique se o relatório de hardware foi criado na home:\n"
+printf "========================================================\n"
 cat /home/$USER/hardinfo.txt
 read -p 'Enter para continuar: '
