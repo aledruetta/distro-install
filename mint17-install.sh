@@ -237,18 +237,18 @@ printf "$SCRIPT\n" "[Script] OK..."
 
 # Aplicativos dos quais serão criados atalhos
 printf "$SCRIPT" "[Script] Criando atalhos pro escritório..."
-apps=('/usr/share/applications/gcalctool.desktop'
-'/usr/share/applications/libreoffice-writer.desktop'
-'/usr/share/applications/libreoffice-calc.desktop'
-'/usr/share/applications/gimp.desktop'
-'/usr/share/applications/inkscape.desktop'
-'/usr/share/applications/dia.desktop'
-'/usr/share/applications/meld.desktop'
-'/usr/share/applications/pyrenamer.desktop'
-'/usr/share/applications/vlc.desktop'
-'/usr/share/applications/sublime_text.desktop'
-'/usr/share/applications/netbeans.desktop'
-'/usr/share/applications/mysql-workbench.desktop')
+# apps=('/usr/share/applications/gcalctool.desktop'
+# '/usr/share/applications/libreoffice-writer.desktop'
+# '/usr/share/applications/libreoffice-calc.desktop'
+# '/usr/share/applications/gimp.desktop'
+# '/usr/share/applications/inkscape.desktop'
+# '/usr/share/applications/dia.desktop'
+# '/usr/share/applications/meld.desktop'
+# '/usr/share/applications/pyrenamer.desktop'
+# '/usr/share/applications/vlc.desktop'
+# '/usr/share/applications/sublime_text.desktop'
+# '/usr/share/applications/netbeans.desktop'
+# '/usr/share/applications/mysql-workbench.desktop')
 printf "$SCRIPT\n" "[Script] OK..."
 
 printf "$SCRIPT" "[Script] Mudando o proprietário e as permissões da área de trabalho do usuário"
@@ -257,8 +257,8 @@ sudo chmod 1755 /home/aluno/Área\ de\ Trabalho/ /home/etec/Área\ de\ Trabalho/
 printf "$SCRIPT\n" "[Script] OK..."
 
 printf "$SCRIPT" "[Script] Copiando e configurando atalhos"
-sudo cp ${apps[@]} /home/aluno/Área\ de\ Trabalho/
-sudo cp ${apps[@]} /home/etec/Área\ de\ Trabalho/
+# sudo cp ${apps[@]} /home/aluno/Área\ de\ Trabalho/
+# sudo cp ${apps[@]} /home/etec/Área\ de\ Trabalho/
 sudo chown etec:etec /home/aluno/Área\ de\ Trabalho/*.desktop /home/etec/Área\ de\ Trabalho/*.desktop
 sudo chmod 755 /home/aluno/Área\ de\ Trabalho/*.desktop /home/etec/Área\ de\ Trabalho/*.desktop
 printf "$SCRIPT\n" "[Script] OK..."
