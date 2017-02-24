@@ -36,7 +36,6 @@ readonly NETB_PPA="ppa:vajdics/netbeans-installer"
 readonly SUB3_PPA_F="/etc/apt/sources.list.d/webupd8team-sublime-text-3-trusty.list"
 readonly SUB3_PPA="ppa:webupd8team/sublime-text-3"
 readonly COLORIDO='\033[1;34m%s\n\033[0m'
-SCR_TIME="[Script][$(date +%T)]"
 
 # Detectar Sistema Operacional
 
@@ -104,7 +103,7 @@ printf "$COLORIDO" "[Script][$(date +%T)] Instalando Java OpenJDK 8..."
 apt-get install openjdk-8-jdk -y
 
 printf "$COLORIDO" "[Script][$(date +%T)] Selecionando a versão 8 do OpenJDK..."
-printf "2" | update-alternatives --config java
+echo "2" | update-alternatives --config java
 
 printf "$COLORIDO" "[Script][$(date +%T)] Verificando versão OpenJDK..."
 java -version
