@@ -52,7 +52,7 @@ printf "$BLUE" "[Script][$(date +%T)] Superusuário"
 if [ $(id -u) -ne 0 ] || [ -z $DESK_ENV ]; then
 	printf "$RED_N" " Fail!"
 	echo "O script deve ser executado como superusuário (sudo)"
-	echo "e preservando as variáveis de ambiente (opção -E):" 
+	echo "e preservando as variáveis de ambiente (opção -E):"
 	echo "\$ sudo -E ./$(basename $0)"
 	echo
 	exit 1
@@ -78,15 +78,15 @@ printf "$GREEN_N" " OK!"
 # Atualizar pacotes
 
 printf "$BLUE_N" "[Script][$(date +%T)] Atualizando repositórios da distribuição..."
-apt-get update &&
+apt-get update
 
 printf "$BLUE_N" "[Script][$(date +%T)] Atualizando os pacotes..."
-apt-get upgrade -y &&
+apt-get upgrade -y
 
 # Codecs e ferramentas de compilador
 
 printf "$BLUE_N" "[Script][$(date +%T)] Instalando codecs e ferramentas de compilador..."
-apt-get install ubuntu-restricted-extras build-essential -y &&
+apt-get install ubuntu-restricted-extras build-essential -y
 
 # PPA's
 
@@ -118,60 +118,63 @@ fi
 printf "$RED_N" "$(cat /etc/apt/sources.list.d/*.list | grep sublime-text)"
 
 printf "$BLUE_N" "[Script][$(date +%T)] Atualizando caché do repositório..."
-apt-get update &&
+apt-get update
 
 # Java OpenJDK 8
 
 printf "$BLUE_N" "[Script][$(date +%T)] Instalando Java OpenJDK 8..."
-apt-get install openjdk-8-jdk -y &&
+apt-get install openjdk-8-jdk -y
 
 printf "$BLUE_N" "[Script][$(date +%T)] Selecionando a versão 8 do OpenJDK..."
 echo "2" | update-alternatives --config java
 echo
 
 printf "$BLUE_N" "[Script][$(date +%T)] Verificando versão OpenJDK..."
-printf "$RED_N" "$(java -version)"
-printf "$RED_N" "$(javac -version)"
+printf "$RED_N" "$(eval 'java -version')"
+printf "$RED_N" "$(eval 'javac -version')"
 
 # Netbeans IDE 8.1
 
 printf "$BLUE_N" "[Script][$(date +%T)] Instalando Netbeans 8.1 IDE..."
-# apt-get install netbeans-installer -y &&
+if [ ! -d "/opt/netbeans" ]; then
+	mkdir -p /opt/netbeans
+fi
+# apt-get install netbeans-installer -y
 
 # Sublime Text
 
 printf "$BLUE_N" "[Script][$(date +%T)] Instalando Sublime Text 3..."
-apt-get install sublime-text -y &&
+apt-get install sublime-text -y
 
 # Aplicativos
 
 printf "$BLUE_N" "[Script][$(date +%T)] Instalando Aplicativos:"
-apt-get install git -y &&
+apt-get install git -y
 printf "$BLUE" "[Script][$(date +%T)] $(type git)"
 printf "$GREEN_N" " OK!"
-apt-get install vim -y &&
+apt-get install vim -y
 printf "$BLUE" "[Script][$(date +%T)] $(type vim)"
 printf "$GREEN_N" " OK!"
-apt-get install inkscape -y &&
+apt-get install inkscape -y
 printf "$BLUE" "[Script][$(date +%T)] $(type inkscape)"
 printf "$GREEN_N" " OK!"
-apt-get install dia -y &&
+apt-get install dia -y
 printf "$BLUE" "[Script][$(date +%T)] $(type dia)"
 printf "$GREEN_N" " OK!"
-apt-get install meld -y &&
+apt-get install meld -y
 printf "$BLUE" "[Script][$(date +%T)] $(type meld)"
 printf "$GREEN_N" " OK!"
-apt-get install mysql-workbench -y &&
+apt-get install mysql-workbench -y
 printf "$BLUE" "[Script][$(date +%T)] $(type mysql-workbench)"
 printf "$GREEN_N" " OK!"
-apt-get install pyrenamer -y &&
+apt-get install pyrenamer -y
 printf "$BLUE" "[Script][$(date +%T)] $(type pyrenamer)"
 printf "$GREEN_N" " OK!"
 
 # LAMP - Apache
 
 printf "$BLUE_N" "[Script][$(date +%T)] Instalando servidor Apache..."
-apt-get install apache2 -y &&
+apt-get install apache2 -y
 
 printf "$BLUE_N" "[Script][$(date +%T)] Mudando as permisões de /var/www/html..."
 chown -R $SUDO_USER:www-data /var/www/html
@@ -179,7 +182,7 @@ chmod -R 775 /var/www/html
 printf "$RED_N" "$(ls -ld /var/www/html)"
 
 printf "$BLUE_N" "[Script][$(date +%T)] Criando link simbólico na home do usuário '$SUDO_USER'..."
-if [ ! -h /home/$SUDO_USER/html ]; then 
+if [ ! -h "/home/$SUDO_USER/html" ]; then
 	ln -s /var/www/html /home/$SUDO_USER
 fi
 printf "$RED_N" "$(ls -ld /home/$SUDO_USER/html)"
@@ -187,13 +190,13 @@ printf "$RED_N" "$(ls -ld /home/$SUDO_USER/html)"
 # LAMP - PHP
 
 printf "$BLUE_N" "[Script][$(date +%T)] Instalando linguagem de programação PHP..."
-apt-get install php5 libapache2-mod-php5 -y &&
+apt-get install php5 libapache2-mod-php5 -y
 
 # LAMP - MySQL
 
 printf "$BLUE_N" "[Script][$(date +%T)] Instalando banco de dados MySQL..."
-apt-get install mysql-server -y &&
-apt-get install libapache2-mod-auth-mysql php5-mysql phpmyadmin -y &&
+apt-get install mysql-server -y
+apt-get install libapache2-mod-auth-mysql php5-mysql phpmyadmin -y
 
 printf "$BLUE_N" "[Script][$(date +%T)] Configurando PHP para trabalhar com MySQL..."
 
@@ -218,7 +221,7 @@ if [ ! -s "/etc/phpmyadmin/config.inc.php.bak" ]; then
 fi
 
 sed -i -E '/^\s*(\/){2}\s.*AllowNoPassword/s/^\s*(\/){2}\s//' /etc/phpmyadmin/config.inc.php
-printf "$RED_N" "$(grep -n "AllowNoPassword" /etc/phpmyadmin/config.inc.php)"
+printf "$RED_N" "$(grep -n 'AllowNoPassword' /etc/phpmyadmin/config.inc.php)"
 
 printf "$BLUE_N" "[Script][$(date +%T)] Configurando Apache para acessar phpMyAdmin..."
 
@@ -233,7 +236,7 @@ saida=$(eval 'grep -n "$include" /etc/apache2/apache2.conf')
 if [ -z "$saida" ]; then
 	echo "$include" >> /etc/apache2/apache2.conf
 fi
-printf "$RED_N" "$saida"
+printf "$RED_N" "$(eval 'grep -n "$include" /etc/apache2/apache2.conf')"
 
 printf "$BLUE_N" "[Script][$(date +%T)] Reiniciando Apache..."
 /etc/init.d/apache2 restart
@@ -250,7 +253,7 @@ if [ -z "$idaluno" ]; then
 fi
 
 printf "$BLUE_N" "[Script][$(date +%T)] Criando link simbólico na home do aluno para /var/www/html..."
-if [ ! -h /home/aluno/html ]; then
+if [ ! -h "/home/aluno/html" ]; then
 	ln -s /var/www/html /home/aluno
 fi
 
@@ -272,7 +275,7 @@ apps=('/usr/share/applications/gcalctool.desktop'
 '/usr/share/applications/mysql-workbench.desktop')
 
 printf "$BLUE_N" "[Script][$(date +%T)] Mudando o proprietário e as permissões da área de trabalho do usuário"
-if [ ! -d /home/aluno/Área\ de\ Trabalho/ ]; then
+if [ ! -d "/home/aluno/Área\ de\ Trabalho/" ]; then
 	mkdir /home/aluno/Área\ de\ Trabalho/
 fi
 chown $SUDO_USER:$SUDO_USER /home/aluno/Área\ de\ Trabalho/
@@ -291,10 +294,12 @@ printf "$RED_N" "$(ls -l /home/$SUDO_USER/Área\ de\ Trabalho/)"
 printf "$BLUE_N" "[Script][$(date +%T)] Criando relatório na home com especificações do hardware..."
 inxi -F | tee /home/$SUDO_USER/hardinfo.txt
 
-# Testes
-
 echo "<?php phpinfo(); ?>" > /home/$SUDO_USER/html/testphp.php
 firefox http://localhost/ http://localhost/testphp.php http://localhost/phpmyadmin 2>/dev/null
+
+# Limpando o cache de repositórios
+sudo apt-get autoremove
+sudo apt-get autoclean
 
 # Garantindo permissões pro Firefox
 chown -R $SUDO_USER:$SUDO_USER /home/$SUDO_USER/.cache/mozilla
