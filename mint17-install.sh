@@ -28,44 +28,50 @@
 readonly DESCRIPTION="$(lsb_release -ds)"
 readonly CODENAME="$(lsb_release -cs)"
 readonly DISTRIBUTOR="$(lsb_release -is)"
-readonly DESKTOP="$(echo $DESKTOP_SESSION)"
-readonly ARQ_PROC="$(getconf LONG_BIT)"
+readonly ARQ_PROC=$(getconf LONG_BIT)
+readonly DESK_ENV="$(env | grep DESKTOP_SESSION= | cut -d'=' -f2)"
+
 readonly JDK_PPA_F="/etc/apt/sources.list.d/openjdk-r-ppa-trusty.list"
 readonly JDK_PPA="ppa:openjdk-r/ppa"
 readonly NETB_PPA_F="/etc/apt/sources.list.d/vajdics-netbeans-installer-trusty.list"
 readonly NETB_PPA="ppa:vajdics/netbeans-installer"
 readonly SUB3_PPA_F="/etc/apt/sources.list.d/webupd8team-sublime-text-3-trusty.list"
 readonly SUB3_PPA="ppa:webupd8team/sublime-text-3"
-readonly COLOR_B_N='\033[1;34m%s\n\033[0m'
+
+readonly COLOR_R_N='\033[1;31m%s\n\033[0m'
 readonly COLOR_G_N='\033[1;32m%s\n\033[0m'
-readonly COLOR_B='\033[1;34m%s\033[0m'
+readonly COLOR_B_N='\033[1;34m%s\n\033[0m'
+readonly COLOR_R='\033[1;31m%s\033[0m'
 readonly COLOR_G='\033[1;32m%s\033[0m'
-
-# Detectar Sistema Operacional
-
-printf "$COLOR_B" "[Script][$(date +%T)] Sistema Operacional detectado: $DESCRIPTION ($ARQ_PROC-bit) $DESKTOP"
-
-if [ $DISTRIBUTOR != "LinuxMint" ] || [ $CODENAME != "rosa" ] || \
-	[ $ARQ_PROC -ne 32 ] || [ $DESKTOP != "mate" ]
-then
-	echo
-	printf "$COLOR_B_N" "[Script][$(date +%T)] Esse script foi escrito para Linux Mint 17.3 Rosa (32-bit)"
-	printf "$COLOR_B_N" "[Script][$(date +%T)] O sistema é incompatível!"
-	exit 1
-fi
-
-printf "$COLOR_B_N" " OK!"
+readonly COLOR_B='\033[1;34m%s\033[0m'
 
 # Superusuário
 
 printf "$COLOR_B" "[Script][$(date +%T)] Superusuário"
 
-if [ `id -u` -ne 0 ]; then
-	printf "$COLOR_B_N" "[Script][$(date +%T)] El script debe ser executado como superusuário (sudo)!"
+if [ $(id -u) -ne 0 ] || [ -z $DESK_ENV ]; then
+	printf "$COLOR_R_N" " Fail!"
+	echo "El script debe ser executado como superusuário"
+	echo "e preservando as variáveis de ambiente: \$ sudo -E $(basename $0)"
 	exit 1
 fi
 
-printf "$COLOR_B_N" " OK!"
+printf "$COLOR_G_N" " OK!"
+
+# Detectar Sistema Operacional
+
+printf "$COLOR_B" "[Script][$(date +%T)] Sistema Operacional detectado: $DESCRIPTION ($ARQ_PROC-bit) $DESK_ENV"
+
+if [ $DISTRIBUTOR != "LinuxMint" ] || [ $CODENAME != "rosa" ] || \
+	[ $ARQ_PROC -ne 32 ] || [ "$DESK_ENV" != "mate" ]
+then
+	echo
+	printf "$COLOR_B_N" "[Script][$(date +%T)] Esse script foi escrito para $DESCRIPTION ($ARQ_PROC-bit) $DESK_ENV"
+	printf "$COLOR_B_N" "[Script][$(date +%T)] O sistema é incompatível!"
+	exit 1
+fi
+
+printf "$COLOR_G_N" " OK!"
 
 # Atualizar pacotes
 
@@ -152,11 +158,11 @@ printf "$COLOR_B_N" "[Script][$(date +%T)] Instalando servidor Apache..."
 apt-get install apache2 -y
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Mudando as permisões de /var/www/html..."
-chown -R etec.www-data /var/www/html
+chown -R $SUDO_USER:www-data /var/www/html
 chmod -R 775 /var/www/html
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Criando link simbólico na home do usuário 'etec'..."
-ln -s /var/www/html /home/etec
+printf "$COLOR_B_N" "[Script][$(date +%T)] Criando link simbólico na home do usuário '$SUDO_USER'..."
+ln -s /var/www/html /home/$SUDO_USER
 
 # LAMP - PHP
 
@@ -242,21 +248,21 @@ apps=('/usr/share/applications/gcalctool.desktop'
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Mudando o proprietário e as permissões da área de trabalho do usuário"
 mkdir /home/aluno/Área\ de\ Trabalho/
-chown etec.etec /home/aluno/Área\ de\ Trabalho/
-chmod 1755 /home/aluno/Área\ de\ Trabalho/ /home/etec/Área\ de\ Trabalho/
+chown $SUDO_USER:$SUDO_USER /home/aluno/Área\ de\ Trabalho/
+chmod 1755 /home/aluno/Área\ de\ Trabalho/ /home/$SUDO_USER/Área\ de\ Trabalho/
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Copiando e configurando atalhos"
 cp ${apps[@]} /home/aluno/Área\ de\ Trabalho/
-cp ${apps[@]} /home/etec/Área\ de\ Trabalho/
-chown etec.etec /home/aluno/Área\ de\ Trabalho/*.desktop /home/etec/Área\ de\ Trabalho/*.desktop
-chmod 755 /home/aluno/Área\ de\ Trabalho/*.desktop /home/etec/Área\ de\ Trabalho/*.desktop
+cp ${apps[@]} /home/$SUDO_USER/Área\ de\ Trabalho/
+chown $SUDO_USER:$SUDO_USER /home/aluno/Área\ de\ Trabalho/*.desktop /home/$SUDO_USER/Área\ de\ Trabalho/*.desktop
+chmod 755 /home/aluno/Área\ de\ Trabalho/*.desktop /home/$SUDO_USER/Área\ de\ Trabalho/*.desktop
 
 # To-do list --> regex limpar terminal colorido
 printf "$COLOR_B_N" "[Script][$(date +%T)] Criando relatório na home com especificações do hardware..."
-inxi -F > /home/etec/hardinfo.txt
+inxi -F > /home/$SUDO_USER/hardinfo.txt
 
 # Garantindo permissões pro Firefox
-chown -R etec.etec /home/etec/.cache/mozilla
+chown -R $SUDO_USER:$SUDO_USER /home/$SUDO_USER/.cache/mozilla
 
 # Testes
 
@@ -317,10 +323,10 @@ echo "==============="
 echo "- Apache"
 echo "- PHP"
 echo "- MySQL e phpMyAdmin"
-echo "<?php phpinfo(); ?>" > /home/etec/html/testphp.php
+echo "<?php phpinfo(); ?>" > /home/$SUDO_USER/html/testphp.php
 firefox http://localhost/ http://localhost/testphp.php http://localhost/phpmyadmin 2>/dev/null &
 read -p 'Enter para continuar: '
-rm /home/etec/html/testphp.php
+rm /home/$SUDO_USER/html/testphp.php
 
 echo "Verifique os arquivos de configuração:"
 echo "======================================"
@@ -332,11 +338,11 @@ echo "/etc/php5/apache2/php.ini"
 cat -n /etc/php5/apache2/php.ini | grep 'extension=msql.so'
 read -p 'Enter para continuar: '
 
-echo "Verifique se o Google é o search engine pro Firefox nas contas 'etec' e 'aluno'"
+echo "Verifique se o Google é o search engine pro Firefox nas contas '$SUDO_USER' e 'aluno'"
 echo "==============================================================================="
 read -p 'Enter para continuar: '
 
 echo "Verifique se o relatório de hardware foi criado na home:"
 echo "========================================================"
-cat /home/etec/hardinfo.txt
+cat /home/$SUDO_USER/hardinfo.txt
 read -p 'Enter para continuar: '
