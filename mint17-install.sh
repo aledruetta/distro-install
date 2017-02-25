@@ -67,9 +67,9 @@ printf "$COLOR_B" "[Script][$(date +%T)] Sistema Operacional detectado: $DESCRIP
 if [ $DISTRIBUTOR != "LinuxMint" ] || [ $CODENAME != "rosa" ] || \
 	[ $ARQ_PROC -ne 32 ] || [ "$DESK_ENV" != "mate" ]
 then
-	echo
-	printf "$COLOR_B_N" "[Script][$(date +%T)] Esse script foi escrito para $DESCRIPTION ($ARQ_PROC-bit) $DESK_ENV"
-	printf "$COLOR_B_N" "[Script][$(date +%T)] O sistema é incompatível!"
+	printf "$COLOR_R_N" " Fail!"
+	echo "Esse script foi escrito para Linux Mint 17.3 Rosa (32-bit) Mate"
+	echo "O sistema é incompatível!"
 	exit 1
 fi
 
@@ -78,15 +78,15 @@ printf "$COLOR_G_N" " OK!"
 # Atualizar pacotes
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Atualizando repositórios da distribuição..."
-apt-get update
+apt-get update &&
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Atualizando os pacotes..."
-apt-get upgrade -y
+apt-get upgrade -y &&
 
 # Codecs e ferramentas de compilador
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Instalando codecs e ferramentas de compilador..."
-apt-get install ubuntu-restricted-extras build-essential -y
+apt-get install ubuntu-restricted-extras build-essential -y &&
 
 # PPA's
 
@@ -112,15 +112,16 @@ else
 fi
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Atualizando caché do repositório..."
-apt-get update
+apt-get update &&
 
 # Java OpenJDK 8
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Instalando Java OpenJDK 8..."
-apt-get install openjdk-8-jdk -y
+apt-get install openjdk-8-jdk -y &&
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Selecionando a versão 8 do OpenJDK..."
 echo "2" | update-alternatives --config java
+echo
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Verificando versão OpenJDK..."
 java -version
@@ -129,53 +130,55 @@ javac -version
 # Netbeans IDE 8.1
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Instalando Netbeans 8.1 IDE..."
-# apt-get install netbeans-installer -y
+# apt-get install netbeans-installer -y &&
 
 # Sublime Text
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Instalando Sublime Text 3..."
-apt-get install sublime-text -y
+apt-get install sublime-text -y &&
 
 # Aplicativos
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Instalando Aplicativos:"
 printf "$COLOR_B_N" "[Script][$(date +%T)] - git (Controle de versões)"
-apt-get install git -y
+apt-get install git -y &&
 printf "$COLOR_B_N" "[Script][$(date +%T)] - vim (Editor de texto)"
-apt-get install vim -y
+apt-get install vim -y &&
 printf "$COLOR_B_N" "[Script][$(date +%T)] - inkscape (Disenho vetorial)"
-apt-get install inkscape -y
+apt-get install inkscape -y &&
 printf "$COLOR_B_N" "[Script][$(date +%T)] - dia (Diagramas)"
-apt-get install dia -y
+apt-get install dia -y &&
 printf "$COLOR_B_N" "[Script][$(date +%T)] - meld (Comparador de arquivos)"
-apt-get install meld -y
+apt-get install meld -y &&
 printf "$COLOR_B_N" "[Script][$(date +%T)] - mysql-workbench (Administração de DB)"
-apt-get install mysql-workbench -y
+apt-get install mysql-workbench -y &&
 printf "$COLOR_B_N" "[Script][$(date +%T)] - pyrenamer (Renomear arquivos em lote)"
-apt-get install pyrenamer -y
+apt-get install pyrenamer -y &&
 
 # LAMP - Apache
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Instalando servidor Apache..."
-apt-get install apache2 -y
+apt-get install apache2 -y &&
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Mudando as permisões de /var/www/html..."
 chown -R $SUDO_USER:www-data /var/www/html
 chmod -R 775 /var/www/html
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Criando link simbólico na home do usuário '$SUDO_USER'..."
-ln -s /var/www/html /home/$SUDO_USER
+if [ ! -h /home/$SUDO_USER/html ]; then 
+	ln -s /var/www/html /home/$SUDO_USER
+fi
 
 # LAMP - PHP
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Instalando linguagem de programação PHP..."
-apt-get install php5 libapache2-mod-php5 -y
+apt-get install php5 libapache2-mod-php5 -y &&
 
 # LAMP - MySQL
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Instalando banco de dados MySQL..."
-apt-get install mysql-server -y
-apt-get install libapache2-mod-auth-mysql php5-mysql phpmyadmin -y
+apt-get install mysql-server -y &&
+apt-get install libapache2-mod-auth-mysql php5-mysql phpmyadmin -y &&
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Configurando PHP para trabalhar com MySQL..."
 
@@ -185,6 +188,7 @@ if [ ! -s "/etc/php5/apache2/php.ini.bak" ]; then
 fi
 
 sed -i -E '/^;\s*extension=msql\.so/s/^;\s*//' /etc/php5/apache2/php.ini
+grep -n "extension=msql.so" /etc/php5/apache2/php.ini
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Reiniciando Apache..."
 /etc/init.d/apache2 restart
@@ -199,6 +203,7 @@ if [ ! -s "/etc/phpmyadmin/config.inc.php.bak" ]; then
 fi
 
 sed -i -E '/^\s*(\/){2}\s.*AllowNoPassword/s/^\s*(\/){2}\s//' /etc/phpmyadmin/config.inc.php
+grep -n "AllowNoPassword" /etc/phpmyadmin/config.inc.php
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Configurando Apache para acessar phpMyAdmin..."
 
@@ -229,7 +234,9 @@ if [ -z $idaluno ]; then
 fi
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Criando link simbólico na home do aluno para /var/www/html..."
-ln -s /var/www/html /home/aluno
+if [ ! -h /home/aluno/html ]; then
+	ln -s /var/www/html /home/aluno
+fi
 
 # Atalhos escritório
 
@@ -249,7 +256,9 @@ apps=('/usr/share/applications/gcalctool.desktop'
 '/usr/share/applications/mysql-workbench.desktop')
 
 printf "$COLOR_B_N" "[Script][$(date +%T)] Mudando o proprietário e as permissões da área de trabalho do usuário"
-mkdir /home/aluno/Área\ de\ Trabalho/
+if [ ! -d /home/aluno/Área\ de\ Trabalho/ ]; then
+	mkdir /home/aluno/Área\ de\ Trabalho/
+fi
 chown $SUDO_USER:$SUDO_USER /home/aluno/Área\ de\ Trabalho/
 chmod 1755 /home/aluno/Área\ de\ Trabalho/ /home/$SUDO_USER/Área\ de\ Trabalho/
 
