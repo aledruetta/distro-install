@@ -251,83 +251,83 @@ chown -R etec.etec /home/etec/.cache/mozilla
 
 # Testes
 
-printf "Verifique as seguintes PPAs (não duplicadas):\n"
-printf "=============================================\n"
-printf "   \- ppa:openjdk-r/ppa\n"
-printf "   \- ppa:vajdics/netbeans-installer\n"
-printf "   \- ppa:webupd8team/sublime-text-3\n"
+echo "Verifique as seguintes PPAs (não duplicadas):"
+echo "============================================="
+echo "   - ppa:openjdk-r/ppa"
+echo "   - ppa:vajdics/netbeans-installer"
+echo "   - ppa:webupd8team/sublime-text-3"
 read -p 'Enter para continuar: '
 inxi -r | grep openjdk-r
 inxi -r | grep netbeans-installer
 inxi -r | grep webupd8team
 read -p 'Enter para continuar: '
 
-printf "Verifique a versão do Java:\n"
-printf "===========================\n"
+echo "Verifique a versão do Java:"
+echo "==========================="
 java -version
 javac -version
 read -p 'Enter para continuar: '
 
-printf "Verifique se os seguentes softwares foram instalado e os mesmos estão funcionando corretamente:\n"
-printf "===============================================================================================\n"
-printf "   \- Workbench: \n"
+echo "Verifique se os seguentes softwares foram instalado e os mesmos estão funcionando corretamente:"
+echo "==============================================================================================="
+echo "   - Workbench: "
 mysql-workbench --version
-printf "   \- Inkscape: \n"
+echo "   - Inkscape: "
 inkscape --version
-printf "   \- Gimp: \n"
+echo "   - Gimp: "
 gimp --version
-printf "   \- Sublime-Text 3: \n"
+echo "   - Sublime-Text 3: "
 sublime-text --version
-printf "   \- Meld: \n"
+echo "   - Meld: "
 meld --version
-printf "   \- PyRenamer: \n"
+echo "   - PyRenamer: "
 pyrenamer --version
-printf "   \- Dia: \n"
+echo "   - Dia: "
 dia --version
-printf "   \- Vim: \n"
+echo "   - Vim: "
 vim --version
-printf "   \- Git: \n"
+echo "   - Git: "
 git --version
-printf "   \- Netbeans (manual: versão, atualizações, plugins)\n"
+echo "   - Netbeans (manual: versão, atualizações, plugins)"
 netbeans --nosplash &
 
 read -p 'Enter para continuar: '
 
-printf "Verifique se a conta 'aluno' foi criada corretamente:\n"
-printf "=====================================================\n"
-printf "/etc/passwd:\n"
+echo "Verifique se a conta 'aluno' foi criada corretamente:"
+echo "====================================================="
+echo "/etc/passwd:"
 id aluno
-printf "link simbólico html (Apache):\n"
+echo "link simbólico html (Apache):"
 ls -l /home/aluno/html
-printf "permissões:\n"
+echo "permissões:"
 ls -ld /var/www/html
 read -p 'Enter para continuar: '
 
-printf "Verifique LAMP:\n"
-printf "===============\n"
-printf "\- Apache\n"
-printf "\- PHP\n"
-printf "\- MySQL e phpMyAdmin\n"
+echo "Verifique LAMP:"
+echo "==============="
+echo "- Apache"
+echo "- PHP"
+echo "- MySQL e phpMyAdmin"
 echo "<?php phpinfo(); ?>" > /home/etec/html/testphp.php
 firefox http://localhost/ http://localhost/testphp.php http://localhost/phpmyadmin 2>/dev/null &
 read -p 'Enter para continuar: '
 rm /home/etec/html/testphp.php
 
-printf "Verifique os arquivos de configuração:\n"
-printf "======================================\n"
-printf "/etc/phpmyadmin/config.inc.php\n"
+echo "Verifique os arquivos de configuração:"
+echo "======================================"
+echo "/etc/phpmyadmin/config.inc.php"
 cat -n /etc/phpmyadmin/config.inc.php | grep 'AllowNoPassword'
-printf "/etc/apache2/apache2.conf\n"
+echo "/etc/apache2/apache2.conf"
 cat -n /etc/apache2/apache2.conf | grep 'Include /etc/phpmyadmin/apache.conf'
-printf "/etc/php5/apache2/php.ini\n"
+echo "/etc/php5/apache2/php.ini"
 cat -n /etc/php5/apache2/php.ini | grep 'extension=msql.so'
 read -p 'Enter para continuar: '
 
-printf "Verifique se o Google é o search engine pro Firefox nas contas 'etec' e 'aluno'\n"
-printf "===============================================================================\n"
+echo "Verifique se o Google é o search engine pro Firefox nas contas 'etec' e 'aluno'"
+echo "==============================================================================="
 read -p 'Enter para continuar: '
 
-printf "Verifique se o relatório de hardware foi criado na home:\n"
-printf "========================================================\n"
+echo "Verifique se o relatório de hardware foi criado na home:"
+echo "========================================================"
 cat /home/etec/hardinfo.txt
 read -p 'Enter para continuar: '
