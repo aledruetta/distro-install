@@ -51,8 +51,10 @@ printf "$COLOR_B" "[Script][$(date +%T)] Superusuário"
 
 if [ $(id -u) -ne 0 ] || [ -z $DESK_ENV ]; then
 	printf "$COLOR_R_N" " Fail!"
-	echo "El script debe ser executado como superusuário"
-	echo "e preservando as variáveis de ambiente: \$ sudo -E $(basename $0)"
+	echo "O script deve ser executado como superusuário (sudo)"
+	echo "e preservando as variáveis de ambiente (opção -E):" 
+	echo "\$ sudo -E ./$(basename $0)"
+	echo
 	exit 1
 fi
 
