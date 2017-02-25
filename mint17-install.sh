@@ -38,19 +38,19 @@ readonly NETB_PPA="ppa:vajdics/netbeans-installer"
 readonly SUB3_PPA_F="/etc/apt/sources.list.d/webupd8team-sublime-text-3-trusty.list"
 readonly SUB3_PPA="ppa:webupd8team/sublime-text-3"
 
-readonly COLOR_R_N='\033[1;31m%s\n\033[0m'
-readonly COLOR_G_N='\033[1;32m%s\n\033[0m'
-readonly COLOR_B_N='\033[1;34m%s\n\033[0m'
-readonly COLOR_R='\033[1;31m%s\033[0m'
-readonly COLOR_G='\033[1;32m%s\033[0m'
-readonly COLOR_B='\033[1;34m%s\033[0m'
+readonly RED_N='\033[1;31m%s\n\033[0m'
+readonly GREEN_N='\033[1;32m%s\n\033[0m'
+readonly BLUE_N='\033[1;34m%s\n\033[0m'
+readonly RED='\033[1;31m%s\033[0m'
+readonly GREEN='\033[1;32m%s\033[0m'
+readonly BLUE='\033[1;34m%s\033[0m'
 
 # Superusuário
 
-printf "$COLOR_B" "[Script][$(date +%T)] Superusuário"
+printf "$BLUE" "[Script][$(date +%T)] Superusuário"
 
 if [ $(id -u) -ne 0 ] || [ -z $DESK_ENV ]; then
-	printf "$COLOR_R_N" " Fail!"
+	printf "$RED_N" " Fail!"
 	echo "O script deve ser executado como superusuário (sudo)"
 	echo "e preservando as variáveis de ambiente (opção -E):" 
 	echo "\$ sudo -E ./$(basename $0)"
@@ -58,129 +58,144 @@ if [ $(id -u) -ne 0 ] || [ -z $DESK_ENV ]; then
 	exit 1
 fi
 
-printf "$COLOR_G_N" " OK!"
+printf "$GREEN_N" " OK!"
 
 # Detectar Sistema Operacional
 
-printf "$COLOR_B" "[Script][$(date +%T)] Sistema Operacional detectado: $DESCRIPTION ($ARQ_PROC-bit) $DESK_ENV"
+printf "$BLUE" "[Script][$(date +%T)] Sistema Operacional detectado: $DESCRIPTION ($ARQ_PROC-bit) $DESK_ENV"
 
 if [ $DISTRIBUTOR != "LinuxMint" ] || [ $CODENAME != "rosa" ] || \
 	[ $ARQ_PROC -ne 32 ] || [ "$DESK_ENV" != "mate" ]
 then
-	printf "$COLOR_R_N" " Fail!"
+	printf "$RED_N" " Fail!"
 	echo "Esse script foi escrito para Linux Mint 17.3 Rosa (32-bit) Mate"
 	echo "O sistema é incompatível!"
 	exit 1
 fi
 
-printf "$COLOR_G_N" " OK!"
+printf "$GREEN_N" " OK!"
 
 # Atualizar pacotes
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Atualizando repositórios da distribuição..."
+printf "$BLUE_N" "[Script][$(date +%T)] Atualizando repositórios da distribuição..."
 apt-get update &&
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Atualizando os pacotes..."
+printf "$BLUE_N" "[Script][$(date +%T)] Atualizando os pacotes..."
 apt-get upgrade -y &&
 
 # Codecs e ferramentas de compilador
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Instalando codecs e ferramentas de compilador..."
+printf "$BLUE_N" "[Script][$(date +%T)] Instalando codecs e ferramentas de compilador..."
 apt-get install ubuntu-restricted-extras build-essential -y &&
 
 # PPA's
 
 if [ ! -s "$JDK_PPA_F" ]; then		# Java
-	printf "$COLOR_B_N" "[Script][$(date +%T)] Adicionando repositório de terceiros $JDK_PPA..."
+	printf "$BLUE_N" "[Script][$(date +%T)] Adicionando repositório de terceiros $JDK_PPA..."
 	apt-add-repository $JDK_PPA -y
 else
-	printf "$COLOR_B_N" "[Script][$(date +%T)] $JDK_PPA já existe"
+	printf "$BLUE" "[Script][$(date +%T)] $JDK_PPA já existe"
+	printf "$GREEN_N" " OK!"
 fi
+printf "$RED_N" "$(cat /etc/apt/sources.list.d/*.list | grep openjdk)"
 
 if [ ! -s "$NETB_PPA_F" ]; then		# Netbeans
-	printf "$COLOR_B_N" "[Script][$(date +%T)] Adicionando repositório de terceiros $NETB_PPA..."
+	printf "$BLUE_N" "[Script][$(date +%T)] Adicionando repositório de terceiros $NETB_PPA..."
 	# add-apt-repository $NETB_PPA -y
 else
-	printf "$COLOR_B_N" "[Script][$(date +%T)] $NETB_PPA já existe"
+	printf "$BLUE" "[Script][$(date +%T)] $NETB_PPA já existe"
+	printf "$GREEN_N" " OK!"
 fi
+printf "$RED_N" "$(cat /etc/apt/sources.list.d/*.list | grep netbeans)"
 
 if [ ! -s "$SUB3_PPA_F" ]; then		# Sublime-Text
-	printf "$COLOR_B_N" "[Script][$(date +%T)] Adicionando repositório de terceiros $SUB3_PPA..."
+	printf "$BLUE_N" "[Script][$(date +%T)] Adicionando repositório de terceiros $SUB3_PPA..."
 	add-apt-repository $SUB3_PPA -y
 else
-	printf "$COLOR_B_N" "[Script][$(date +%T)] $SUB3_PPA já existe"
+	printf "$BLUE" "[Script][$(date +%T)] $SUB3_PPA já existe"
+	printf "$GREEN_N" " OK!"
 fi
+printf "$RED_N" "$(cat /etc/apt/sources.list.d/*.list | grep sublime-text)"
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Atualizando caché do repositório..."
+printf "$BLUE_N" "[Script][$(date +%T)] Atualizando caché do repositório..."
 apt-get update &&
 
 # Java OpenJDK 8
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Instalando Java OpenJDK 8..."
+printf "$BLUE_N" "[Script][$(date +%T)] Instalando Java OpenJDK 8..."
 apt-get install openjdk-8-jdk -y &&
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Selecionando a versão 8 do OpenJDK..."
+printf "$BLUE_N" "[Script][$(date +%T)] Selecionando a versão 8 do OpenJDK..."
 echo "2" | update-alternatives --config java
 echo
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Verificando versão OpenJDK..."
-java -version
-javac -version
+printf "$BLUE_N" "[Script][$(date +%T)] Verificando versão OpenJDK..."
+printf "$RED_N" "$(java -version)"
+printf "$RED_N" "$(javac -version)"
 
 # Netbeans IDE 8.1
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Instalando Netbeans 8.1 IDE..."
+printf "$BLUE_N" "[Script][$(date +%T)] Instalando Netbeans 8.1 IDE..."
 # apt-get install netbeans-installer -y &&
 
 # Sublime Text
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Instalando Sublime Text 3..."
+printf "$BLUE_N" "[Script][$(date +%T)] Instalando Sublime Text 3..."
 apt-get install sublime-text -y &&
 
 # Aplicativos
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Instalando Aplicativos:"
-printf "$COLOR_B_N" "[Script][$(date +%T)] - git (Controle de versões)"
+printf "$BLUE_N" "[Script][$(date +%T)] Instalando Aplicativos:"
 apt-get install git -y &&
-printf "$COLOR_B_N" "[Script][$(date +%T)] - vim (Editor de texto)"
+printf "$BLUE" "[Script][$(date +%T)] $(type git)"
+printf "$GREEN_N" " OK!"
 apt-get install vim -y &&
-printf "$COLOR_B_N" "[Script][$(date +%T)] - inkscape (Disenho vetorial)"
+printf "$BLUE" "[Script][$(date +%T)] $(type vim)"
+printf "$GREEN_N" " OK!"
 apt-get install inkscape -y &&
-printf "$COLOR_B_N" "[Script][$(date +%T)] - dia (Diagramas)"
+printf "$BLUE" "[Script][$(date +%T)] $(type inkscape)"
+printf "$GREEN_N" " OK!"
 apt-get install dia -y &&
-printf "$COLOR_B_N" "[Script][$(date +%T)] - meld (Comparador de arquivos)"
+printf "$BLUE" "[Script][$(date +%T)] $(type dia)"
+printf "$GREEN_N" " OK!"
 apt-get install meld -y &&
-printf "$COLOR_B_N" "[Script][$(date +%T)] - mysql-workbench (Administração de DB)"
+printf "$BLUE" "[Script][$(date +%T)] $(type meld)"
+printf "$GREEN_N" " OK!"
 apt-get install mysql-workbench -y &&
-printf "$COLOR_B_N" "[Script][$(date +%T)] - pyrenamer (Renomear arquivos em lote)"
+printf "$BLUE" "[Script][$(date +%T)] $(type mysql-workbench)"
+printf "$GREEN_N" " OK!"
 apt-get install pyrenamer -y &&
+printf "$BLUE" "[Script][$(date +%T)] $(type pyrenamer)"
+printf "$GREEN_N" " OK!"
 
 # LAMP - Apache
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Instalando servidor Apache..."
+printf "$BLUE_N" "[Script][$(date +%T)] Instalando servidor Apache..."
 apt-get install apache2 -y &&
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Mudando as permisões de /var/www/html..."
+printf "$BLUE_N" "[Script][$(date +%T)] Mudando as permisões de /var/www/html..."
 chown -R $SUDO_USER:www-data /var/www/html
 chmod -R 775 /var/www/html
+printf "$RED_N" "$(ls -ld /var/www/html)"
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Criando link simbólico na home do usuário '$SUDO_USER'..."
+printf "$BLUE_N" "[Script][$(date +%T)] Criando link simbólico na home do usuário '$SUDO_USER'..."
 if [ ! -h /home/$SUDO_USER/html ]; then 
 	ln -s /var/www/html /home/$SUDO_USER
 fi
+printf "$RED_N" "$(ls -ld /home/$SUDO_USER/html)"
 
 # LAMP - PHP
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Instalando linguagem de programação PHP..."
+printf "$BLUE_N" "[Script][$(date +%T)] Instalando linguagem de programação PHP..."
 apt-get install php5 libapache2-mod-php5 -y &&
 
 # LAMP - MySQL
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Instalando banco de dados MySQL..."
+printf "$BLUE_N" "[Script][$(date +%T)] Instalando banco de dados MySQL..."
 apt-get install mysql-server -y &&
 apt-get install libapache2-mod-auth-mysql php5-mysql phpmyadmin -y &&
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Configurando PHP para trabalhar com MySQL..."
+printf "$BLUE_N" "[Script][$(date +%T)] Configurando PHP para trabalhar com MySQL..."
 
 if [ ! -s "/etc/php5/apache2/php.ini.bak" ]; then
 	# Backup
@@ -188,14 +203,14 @@ if [ ! -s "/etc/php5/apache2/php.ini.bak" ]; then
 fi
 
 sed -i -E '/^;\s*extension=msql\.so/s/^;\s*//' /etc/php5/apache2/php.ini
-grep -n "extension=msql.so" /etc/php5/apache2/php.ini
+printf "$RED_N" "$(grep -n "extension=msql.so" /etc/php5/apache2/php.ini)"
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Reiniciando Apache..."
+printf "$BLUE_N" "[Script][$(date +%T)] Reiniciando Apache..."
 /etc/init.d/apache2 restart
 
 # LAMP - phpMyAdmin
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Configurando phpMyAdmin para acessar sem senha..."
+printf "$BLUE_N" "[Script][$(date +%T)] Configurando phpMyAdmin para acessar sem senha..."
 
 if [ ! -s "/etc/phpmyadmin/config.inc.php.bak" ]; then
 	# Backup
@@ -203,9 +218,9 @@ if [ ! -s "/etc/phpmyadmin/config.inc.php.bak" ]; then
 fi
 
 sed -i -E '/^\s*(\/){2}\s.*AllowNoPassword/s/^\s*(\/){2}\s//' /etc/phpmyadmin/config.inc.php
-grep -n "AllowNoPassword" /etc/phpmyadmin/config.inc.php
+printf "$RED_N" "$(grep -n "AllowNoPassword" /etc/phpmyadmin/config.inc.php)"
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Configurando Apache para acessar phpMyAdmin..."
+printf "$BLUE_N" "[Script][$(date +%T)] Configurando Apache para acessar phpMyAdmin..."
 
 if [ ! -s "/etc/apache2/apache2.conf.bak" ]; then
 	# Backup
@@ -218,22 +233,23 @@ saida=$(eval 'grep -n "$include" /etc/apache2/apache2.conf')
 if [ -z "$saida" ]; then
 	echo "$include" >> /etc/apache2/apache2.conf
 fi
-echo "$saida"
+printf "$RED_N" "$saida"
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Reiniciando Apache..."
+printf "$BLUE_N" "[Script][$(date +%T)] Reiniciando Apache..."
 /etc/init.d/apache2 restart
 
 # Conta Aluno
 
 # to-do list --> corrigir entrada de dados
-printf "$COLOR_B_N" "[Script][$(date +%T)] Criando conta aluno (passwd: 'aluno'...)"
-idaluno=$(id aluno 2> /dev/null)
-if [ -z $idaluno ]; then
+printf "$BLUE_N" "[Script][$(date +%T)] Criando conta aluno (passwd: 'aluno'...)"
+idaluno="$(id aluno 2> /dev/null)"
+if [ -z "$idaluno" ]; then
 	adduser aluno
 	adduser aluno www-data
+	printf "$RED_N" "$idaluno"
 fi
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Criando link simbólico na home do aluno para /var/www/html..."
+printf "$BLUE_N" "[Script][$(date +%T)] Criando link simbólico na home do aluno para /var/www/html..."
 if [ ! -h /home/aluno/html ]; then
 	ln -s /var/www/html /home/aluno
 fi
@@ -241,7 +257,7 @@ fi
 # Atalhos escritório
 
 # Aplicativos dos quais serão criados atalhos
-printf "$COLOR_B_N" "[Script][$(date +%T)] Criando atalhos pro escritório..."
+printf "$BLUE_N" "[Script][$(date +%T)] Criando atalhos pro escritório..."
 apps=('/usr/share/applications/gcalctool.desktop'
 '/usr/share/applications/libreoffice-writer.desktop'
 '/usr/share/applications/libreoffice-calc.desktop'
@@ -255,105 +271,33 @@ apps=('/usr/share/applications/gcalctool.desktop'
 '/usr/share/applications/netbeans.desktop'
 '/usr/share/applications/mysql-workbench.desktop')
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Mudando o proprietário e as permissões da área de trabalho do usuário"
+printf "$BLUE_N" "[Script][$(date +%T)] Mudando o proprietário e as permissões da área de trabalho do usuário"
 if [ ! -d /home/aluno/Área\ de\ Trabalho/ ]; then
 	mkdir /home/aluno/Área\ de\ Trabalho/
 fi
 chown $SUDO_USER:$SUDO_USER /home/aluno/Área\ de\ Trabalho/
 chmod 1755 /home/aluno/Área\ de\ Trabalho/ /home/$SUDO_USER/Área\ de\ Trabalho/
 
-printf "$COLOR_B_N" "[Script][$(date +%T)] Copiando e configurando atalhos"
+printf "$BLUE_N" "[Script][$(date +%T)] Copiando e configurando atalhos"
 cp ${apps[@]} /home/aluno/Área\ de\ Trabalho/
 cp ${apps[@]} /home/$SUDO_USER/Área\ de\ Trabalho/
 chown $SUDO_USER:$SUDO_USER /home/aluno/Área\ de\ Trabalho/*.desktop /home/$SUDO_USER/Área\ de\ Trabalho/*.desktop
 chmod 755 /home/aluno/Área\ de\ Trabalho/*.desktop /home/$SUDO_USER/Área\ de\ Trabalho/*.desktop
 
+printf "$RED_N" "$(ls -l /home/aluno/Área\ de\ Trabalho/)"
+printf "$RED_N" "$(ls -l /home/$SUDO_USER/Área\ de\ Trabalho/)"
+
 # To-do list --> regex limpar terminal colorido
-printf "$COLOR_B_N" "[Script][$(date +%T)] Criando relatório na home com especificações do hardware..."
-inxi -F > /home/$SUDO_USER/hardinfo.txt
+printf "$BLUE_N" "[Script][$(date +%T)] Criando relatório na home com especificações do hardware..."
+inxi -F | tee /home/$SUDO_USER/hardinfo.txt
+
+# Testes
+
+echo "<?php phpinfo(); ?>" > /home/$SUDO_USER/html/testphp.php
+firefox http://localhost/ http://localhost/testphp.php http://localhost/phpmyadmin 2>/dev/null
 
 # Garantindo permissões pro Firefox
 chown -R $SUDO_USER:$SUDO_USER /home/$SUDO_USER/.cache/mozilla
 
-# Testes
-
-echo "Verifique as seguintes PPAs (não duplicadas):"
-echo "============================================="
-echo "   - ppa:openjdk-r/ppa"
-echo "   - ppa:vajdics/netbeans-installer"
-echo "   - ppa:webupd8team/sublime-text-3"
-read -p 'Enter para continuar: '
-inxi -r | grep openjdk-r
-inxi -r | grep netbeans-installer
-inxi -r | grep webupd8team
-read -p 'Enter para continuar: '
-
-echo "Verifique a versão do Java:"
-echo "==========================="
-java -version
-javac -version
-read -p 'Enter para continuar: '
-
-echo "Verifique se os seguentes softwares foram instalado e os mesmos estão funcionando corretamente:"
-echo "==============================================================================================="
-echo "   - Workbench: "
-mysql-workbench --version
-echo "   - Inkscape: "
-inkscape --version
-echo "   - Gimp: "
-gimp --version
-echo "   - Sublime-Text 3: "
-sublime-text --version
-echo "   - Meld: "
-meld --version
-echo "   - PyRenamer: "
-pyrenamer --version
-echo "   - Dia: "
-dia --version
-echo "   - Vim: "
-vim --version
-echo "   - Git: "
-git --version
-echo "   - Netbeans (manual: versão, atualizações, plugins)"
-netbeans --nosplash &
-
-read -p 'Enter para continuar: '
-
-echo "Verifique se a conta 'aluno' foi criada corretamente:"
-echo "====================================================="
-echo "/etc/passwd:"
-id aluno
-echo "link simbólico html (Apache):"
-ls -l /home/aluno/html
-echo "permissões:"
-ls -ld /var/www/html
-read -p 'Enter para continuar: '
-
-echo "Verifique LAMP:"
-echo "==============="
-echo "- Apache"
-echo "- PHP"
-echo "- MySQL e phpMyAdmin"
-echo "<?php phpinfo(); ?>" > /home/$SUDO_USER/html/testphp.php
-firefox http://localhost/ http://localhost/testphp.php http://localhost/phpmyadmin 2>/dev/null &
-read -p 'Enter para continuar: '
+# Deletando arquivo teste PHP
 rm /home/$SUDO_USER/html/testphp.php
-
-echo "Verifique os arquivos de configuração:"
-echo "======================================"
-echo "/etc/phpmyadmin/config.inc.php"
-cat -n /etc/phpmyadmin/config.inc.php | grep 'AllowNoPassword'
-echo "/etc/apache2/apache2.conf"
-cat -n /etc/apache2/apache2.conf | grep 'Include /etc/phpmyadmin/apache.conf'
-echo "/etc/php5/apache2/php.ini"
-cat -n /etc/php5/apache2/php.ini | grep 'extension=msql.so'
-read -p 'Enter para continuar: '
-
-echo "Verifique se o Google é o search engine pro Firefox nas contas '$SUDO_USER' e 'aluno'"
-echo "==============================================================================="
-read -p 'Enter para continuar: '
-
-echo "Verifique se o relatório de hardware foi criado na home:"
-echo "========================================================"
-cat /home/$SUDO_USER/hardinfo.txt
-read -p 'Enter para continuar: '
