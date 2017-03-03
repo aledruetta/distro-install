@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
-#  ______   _________  ______   ______
+
+
 # /_____/\ /________/\/_____/\ /_____/\
 # \::::_\/_\__.::.__\/\::::_\/_\:::__\/
 #  \:\/___/\  \::\ \   \:\/___/\\:\ \  __
 #   \::___\/_  \::\ \   \::___\/_\:\ \/_/\
 #    \:\____/\  \::\ \   \:\____/\\:\_\ \ \
 #     \_____\/   \__\/    \_____\/ \_____\/
+#
+# mint17-install
 #
 # Instalador de Linux Mint 17.3 (Rosa)
 # para computadores antigos do laboratório de
@@ -20,8 +23,20 @@
 # Download: https://www.linuxmint.com/edition.php?id=205
 # Notas da versão: https://linuxmint.com/rel_rosa_mate.php
 #
-# Autores: Alejandro e Lucas.
+# Autores: Alejandro Druetta e Lucas Xavier Leite.
 #
+# mint17-install is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# mint17-install is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with mint17-install. If not, see <http://www.gnu.org/licenses/>.
 
 
 # Constantes
