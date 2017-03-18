@@ -199,6 +199,7 @@ find /var/www/html -type d | xargs chmod 775
 find /var/www/html -type f | xargs chmod 664
 find /var/www/html -type d | xargs chmod g+s
 setfacl -R -d -m u::rwX,g:www-data:rwX /var/www/html
+chmod g+s /var/www/html
 printf "$RED_N" "$(ls -ld /var/www/html)"
 
 printf "$BLUE_N" "[Script][$(date +%T)] Criando link simbólico na home do usuário '$SUDO_USER'..."
