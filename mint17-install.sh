@@ -62,10 +62,10 @@ readonly BLUE='\033[1;34m%s\033[0m'
 
 # Superusuário
 
-printf "$BLUE" "[Script][$(date +%T)] Superusuário"
+printf "%s" "$BLUE" "[Script][$(date +%T)] Superusuário"
 
-if [ $(id -u) -ne 0 ] || [ -z $DESK_ENV ]; then
-	printf "$RED_N" " Fail!"
+if [ "$(id -u)" -ne 0 ] || [ -z $DESK_ENV ]; then
+	printf "%s" "$RED_N" " Fail!"
 	echo "O script deve ser executado como superusuário (sudo)"
 	echo "e preservando as variáveis de ambiente (opção -E):"
 	echo "\$ sudo -E ./$(basename $0)"
@@ -73,84 +73,84 @@ if [ $(id -u) -ne 0 ] || [ -z $DESK_ENV ]; then
 	exit 1
 fi
 
-printf "$GREEN_N" " OK!"
+printf "%s" "$GREEN_N" " OK!"
 
 # Detectar Sistema Operacional
 
-printf "$BLUE" "[Script][$(date +%T)] Sistema Operacional detectado: $DESCRIPTION ($ARQ_PROC-bit) $DESK_ENV"
+printf "%s" "$BLUE" "[Script][$(date +%T)] Sistema Operacional detectado: $DESCRIPTION ($ARQ_PROC-bit) $DESK_ENV"
 
 if [ $DISTRIBUTOR != "LinuxMint" ] || [ $CODENAME != "rosa" ] || \
 	[ $ARQ_PROC -ne 32 ] || [ "$DESK_ENV" != "mate" ]
 then
-	printf "$RED_N" " Fail!"
+	printf "%s" "$RED_N" " Fail!"
 	echo "Esse script foi escrito para Linux Mint 17.3 Rosa (32-bit) Mate"
 	echo "O sistema é incompatível!"
 	exit 1
 fi
 
-printf "$GREEN_N" " OK!"
+printf "%s" "$GREEN_N" " OK!"
 
 # Atualizar pacotes
 
-printf "$BLUE_N" "[Script][$(date +%T)] Atualizando repositórios da distribuição..."
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Atualizando repositórios da distribuição..."
 apt-get update
 
-printf "$BLUE_N" "[Script][$(date +%T)] Atualizando os pacotes..."
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Atualizando os pacotes..."
 apt-get upgrade -y
 
 # Codecs e ferramentas de compilador
 
-printf "$BLUE_N" "[Script][$(date +%T)] Instalando codecs e ferramentas de compilador..."
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Instalando codecs e ferramentas de compilador..."
 apt-get install ubuntu-restricted-extras build-essential -y
 
 # PPA's
 
 if [ ! -s "$JDK_PPA_F" ]; then		# Java
-	printf "$BLUE_N" "[Script][$(date +%T)] Adicionando repositório de terceiros $JDK_PPA..."
+	printf "%s" "$BLUE_N" "[Script][$(date +%T)] Adicionando repositório de terceiros $JDK_PPA..."
 	apt-add-repository $JDK_PPA -y
 else
-	printf "$BLUE" "[Script][$(date +%T)] $JDK_PPA já existe"
-	printf "$GREEN_N" " OK!"
+	printf "%s" "$BLUE" "[Script][$(date +%T)] $JDK_PPA já existe"
+	printf "%s" "$GREEN_N" " OK!"
 fi
-printf "$RED_N" "$(cat /etc/apt/sources.list.d/*.list | grep openjdk)"
+printf "%s" "$RED_N" "$(cat /etc/apt/sources.list.d/*.list | grep openjdk)"
 
 if [ ! -s "$NETB_PPA_F" ]; then		# Netbeans
-	printf "$BLUE_N" "[Script][$(date +%T)] Adicionando repositório de terceiros $NETB_PPA..."
+	printf "%s" "$BLUE_N" "[Script][$(date +%T)] Adicionando repositório de terceiros $NETB_PPA..."
 	# add-apt-repository $NETB_PPA -y
 else
-	printf "$BLUE" "[Script][$(date +%T)] $NETB_PPA já existe"
-	printf "$GREEN_N" " OK!"
+	printf "%s" "$BLUE" "[Script][$(date +%T)] $NETB_PPA já existe"
+	printf "%s" "$GREEN_N" " OK!"
 fi
-printf "$RED_N" "$(cat /etc/apt/sources.list.d/*.list | grep netbeans)"
+printf "%s" "$RED_N" "$(cat /etc/apt/sources.list.d/*.list | grep netbeans)"
 
 if [ ! -s "$SUB3_PPA_F" ]; then		# Sublime-Text
-	printf "$BLUE_N" "[Script][$(date +%T)] Adicionando repositório de terceiros $SUB3_PPA..."
+	printf "%s" "$BLUE_N" "[Script][$(date +%T)] Adicionando repositório de terceiros $SUB3_PPA..."
 	add-apt-repository $SUB3_PPA -y
 else
-	printf "$BLUE" "[Script][$(date +%T)] $SUB3_PPA já existe"
-	printf "$GREEN_N" " OK!"
+	printf "%s" "$BLUE" "[Script][$(date +%T)] $SUB3_PPA já existe"
+	printf "%s" "$GREEN_N" " OK!"
 fi
-printf "$RED_N" "$(cat /etc/apt/sources.list.d/*.list | grep sublime-text)"
+printf "%s" "$RED_N" "$(cat /etc/apt/sources.list.d/*.list | grep sublime-text)"
 
-printf "$BLUE_N" "[Script][$(date +%T)] Atualizando caché do repositório..."
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Atualizando caché do repositório..."
 apt-get update
 
 # Java OpenJDK 8
 
-printf "$BLUE_N" "[Script][$(date +%T)] Instalando Java OpenJDK 8..."
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Instalando Java OpenJDK 8..."
 apt-get install openjdk-8-jdk -y
 
-printf "$BLUE_N" "[Script][$(date +%T)] Selecionando a versão 8 do OpenJDK..."
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Selecionando a versão 8 do OpenJDK..."
 echo "2" | update-alternatives --config java
 echo
 
-printf "$BLUE_N" "[Script][$(date +%T)] Verificando versão OpenJDK..."
-printf "$RED_N" "$(eval 'java -version')"
-printf "$RED_N" "$(eval 'javac -version')"
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Verificando versão OpenJDK..."
+printf "%s" "$RED_N" "$(eval 'java -version')"
+printf "%s" "$RED_N" "$(eval 'javac -version')"
 
 # Netbeans IDE 8.1
 
-printf "$BLUE_N" "[Script][$(date +%T)] Instalando Netbeans 8.1 IDE..."
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Instalando Netbeans 8.1 IDE..."
 if [ ! -d "/opt/netbeans" ]; then
 	mkdir -p /opt/netbeans
 fi
@@ -158,68 +158,68 @@ fi
 
 # Sublime Text
 
-printf "$BLUE_N" "[Script][$(date +%T)] Instalando Sublime Text 3..."
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Instalando Sublime Text 3..."
 apt-get install sublime-text -y
 
 # Aplicativos
 
-printf "$BLUE_N" "[Script][$(date +%T)] Instalando Aplicativos:"
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Instalando Aplicativos:"
 apt-get install git -y
-printf "$BLUE" "[Script][$(date +%T)] $(type git)"
-printf "$GREEN_N" " OK!"
+printf "%s" "$BLUE" "[Script][$(date +%T)] $(type git)"
+printf "%s" "$GREEN_N" " OK!"
 apt-get install vim -y
-printf "$BLUE" "[Script][$(date +%T)] $(type vim)"
-printf "$GREEN_N" " OK!"
+printf "%s" "$BLUE" "[Script][$(date +%T)] $(type vim)"
+printf "%s" "$GREEN_N" " OK!"
 apt-get install inkscape -y
-printf "$BLUE" "[Script][$(date +%T)] $(type inkscape)"
-printf "$GREEN_N" " OK!"
+printf "%s" "$BLUE" "[Script][$(date +%T)] $(type inkscape)"
+printf "%s" "$GREEN_N" " OK!"
 apt-get install dia -y
-printf "$BLUE" "[Script][$(date +%T)] $(type dia)"
-printf "$GREEN_N" " OK!"
+printf "%s" "$BLUE" "[Script][$(date +%T)] $(type dia)"
+printf "%s" "$GREEN_N" " OK!"
 apt-get install meld -y
-printf "$BLUE" "[Script][$(date +%T)] $(type meld)"
-printf "$GREEN_N" " OK!"
+printf "%s" "$BLUE" "[Script][$(date +%T)] $(type meld)"
+printf "%s" "$GREEN_N" " OK!"
 apt-get install mysql-workbench -y
-printf "$BLUE" "[Script][$(date +%T)] $(type mysql-workbench)"
-printf "$GREEN_N" " OK!"
+printf "%s" "$BLUE" "[Script][$(date +%T)] $(type mysql-workbench)"
+printf "%s" "$GREEN_N" " OK!"
 apt-get install pyrenamer -y
-printf "$BLUE" "[Script][$(date +%T)] $(type pyrenamer)"
-printf "$GREEN_N" " OK!"
+printf "%s" "$BLUE" "[Script][$(date +%T)] $(type pyrenamer)"
+printf "%s" "$GREEN_N" " OK!"
 
 # LAMP - Apache
 
-printf "$BLUE_N" "[Script][$(date +%T)] Instalando servidor Apache..."
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Instalando servidor Apache..."
 apt-get install apache2 -y
 
-printf "$BLUE_N" "[Script][$(date +%T)] Mudando as permisões de /var/www/html..."
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Mudando as permisões de /var/www/html..."
 adduser $SUDO_USER www-data
 chown $SUDO_USER:www-data /var/www/html
 chgrp -R www-data /var/www/html
-find /var/www/html -type d | xargs chmod 775
-find /var/www/html -type f | xargs chmod 664
-find /var/www/html -type d | xargs chmod g+s
+find /var/www/html -type d -exec chmod 775 {} \;
+find /var/www/html -type f -exec chmod 664 {} \;
+find /var/www/html -type d -exec chmod g+s {} \;
 setfacl -R -d -m u::rwX,g:www-data:rwX /var/www/html
 chmod g+s /var/www/html
-printf "$RED_N" "$(ls -ld /var/www/html)"
+printf "%s" "$RED_N" "$(ls -ld /var/www/html)"
 
-printf "$BLUE_N" "[Script][$(date +%T)] Criando link simbólico na home do usuário '$SUDO_USER'..."
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Criando link simbólico na home do usuário '$SUDO_USER'..."
 if [ ! -h "/home/$SUDO_USER/html" ]; then
 	ln -s /var/www/html /home/$SUDO_USER
 fi
-printf "$RED_N" "$(ls -ld /home/$SUDO_USER/html)"
+printf "%s" "$RED_N" "$(ls -ld /home/$SUDO_USER/html)"
 
 # LAMP - PHP
 
-printf "$BLUE_N" "[Script][$(date +%T)] Instalando linguagem de programação PHP..."
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Instalando linguagem de programação PHP..."
 apt-get install php5 libapache2-mod-php5 -y
 
 # LAMP - MySQL
 
-printf "$BLUE_N" "[Script][$(date +%T)] Instalando banco de dados MySQL..."
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Instalando banco de dados MySQL..."
 apt-get install mysql-server -y
 apt-get install libapache2-mod-auth-mysql php5-mysql phpmyadmin -y
 
-printf "$BLUE_N" "[Script][$(date +%T)] Configurando PHP para trabalhar com MySQL..."
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Configurando PHP para trabalhar com MySQL..."
 
 if [ ! -s "/etc/php5/apache2/php.ini.bak" ]; then
 	# Backup
@@ -227,14 +227,14 @@ if [ ! -s "/etc/php5/apache2/php.ini.bak" ]; then
 fi
 
 sed -i -E '/^;\s*extension=msql\.so/s/^;\s*//' /etc/php5/apache2/php.ini
-printf "$RED_N" "$(grep -n "extension=msql.so" /etc/php5/apache2/php.ini)"
+printf "%s" "$RED_N" "$(grep -n "extension=msql.so" /etc/php5/apache2/php.ini)"
 
-printf "$BLUE_N" "[Script][$(date +%T)] Reiniciando Apache..."
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Reiniciando Apache..."
 /etc/init.d/apache2 restart
 
 # LAMP - phpMyAdmin
 
-printf "$BLUE_N" "[Script][$(date +%T)] Configurando phpMyAdmin para acessar sem senha..."
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Configurando phpMyAdmin para acessar sem senha..."
 
 if [ ! -s "/etc/phpmyadmin/config.inc.php.bak" ]; then
 	# Backup
@@ -242,9 +242,9 @@ if [ ! -s "/etc/phpmyadmin/config.inc.php.bak" ]; then
 fi
 
 sed -i -E '/^\s*(\/){2}\s.*AllowNoPassword/s/^\s*(\/){2}\s//' /etc/phpmyadmin/config.inc.php
-printf "$RED_N" "$(grep -n 'AllowNoPassword' /etc/phpmyadmin/config.inc.php)"
+printf "%s" "$RED_N" "$(grep -n 'AllowNoPassword' /etc/phpmyadmin/config.inc.php)"
 
-printf "$BLUE_N" "[Script][$(date +%T)] Configurando Apache para acessar phpMyAdmin..."
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Configurando Apache para acessar phpMyAdmin..."
 
 if [ ! -s "/etc/apache2/apache2.conf.bak" ]; then
 	# Backup
@@ -257,23 +257,23 @@ saida=$(eval 'grep -n "$include" /etc/apache2/apache2.conf')
 if [ -z "$saida" ]; then
 	echo "$include" >> /etc/apache2/apache2.conf
 fi
-printf "$RED_N" "$(eval 'grep -n "$include" /etc/apache2/apache2.conf')"
+printf "%s" "$RED_N" "$(eval 'grep -n "$include" /etc/apache2/apache2.conf')"
 
-printf "$BLUE_N" "[Script][$(date +%T)] Reiniciando Apache..."
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Reiniciando Apache..."
 /etc/init.d/apache2 restart
 
 # Conta Aluno
 
 # to-do list --> corrigir entrada de dados
-printf "$BLUE_N" "[Script][$(date +%T)] Criando conta aluno (passwd: 'aluno'...)"
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Criando conta aluno (passwd: 'aluno'...)"
 idaluno="$(id aluno 2> /dev/null)"
 if [ -z "$idaluno" ]; then
 	adduser aluno
 	adduser aluno www-data
-	printf "$RED_N" "$idaluno"
+	printf "%s" "$RED_N" "$idaluno"
 fi
 
-printf "$BLUE_N" "[Script][$(date +%T)] Criando link simbólico na home do aluno para /var/www/html..."
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Criando link simbólico na home do aluno para /var/www/html..."
 if [ ! -h "/home/aluno/html" ]; then
 	ln -s /var/www/html /home/aluno
 fi
@@ -281,7 +281,7 @@ fi
 # Atalhos escritório
 
 # Aplicativos dos quais serão criados atalhos
-printf "$BLUE_N" "[Script][$(date +%T)] Criando atalhos pro escritório..."
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Criando atalhos pro escritório..."
 apps=('/usr/share/applications/gcalctool.desktop'
 '/usr/share/applications/libreoffice-writer.desktop'
 '/usr/share/applications/libreoffice-calc.desktop'
@@ -295,24 +295,24 @@ apps=('/usr/share/applications/gcalctool.desktop'
 '/usr/share/applications/netbeans.desktop'
 '/usr/share/applications/mysql-workbench.desktop')
 
-printf "$BLUE_N" "[Script][$(date +%T)] Mudando o proprietário e as permissões da área de trabalho do usuário"
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Mudando o proprietário e as permissões da área de trabalho do usuário"
 if [ ! -d "/home/aluno/Área\ de\ Trabalho/" ]; then
 	mkdir /home/aluno/Área\ de\ Trabalho/
 fi
 chown $SUDO_USER:$SUDO_USER /home/aluno/Área\ de\ Trabalho/
 chmod 1755 /home/aluno/Área\ de\ Trabalho/ /home/$SUDO_USER/Área\ de\ Trabalho/
 
-printf "$BLUE_N" "[Script][$(date +%T)] Copiando e configurando atalhos"
-cp ${apps[@]} /home/aluno/Área\ de\ Trabalho/
-cp ${apps[@]} /home/$SUDO_USER/Área\ de\ Trabalho/
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Copiando e configurando atalhos"
+cp "${apps[@]}" /home/aluno/Área\ de\ Trabalho/
+cp "${apps[@]}" /home/$SUDO_USER/Área\ de\ Trabalho/
 chown $SUDO_USER:$SUDO_USER /home/aluno/Área\ de\ Trabalho/*.desktop /home/$SUDO_USER/Área\ de\ Trabalho/*.desktop
 chmod 755 /home/aluno/Área\ de\ Trabalho/*.desktop /home/$SUDO_USER/Área\ de\ Trabalho/*.desktop
 
-printf "$RED_N" "$(ls -l /home/aluno/Área\ de\ Trabalho/)"
-printf "$RED_N" "$(ls -l /home/$SUDO_USER/Área\ de\ Trabalho/)"
+printf "%s" "$RED_N" "$(ls -l /home/aluno/Área\ de\ Trabalho/)"
+printf "%s" "$RED_N" "$(ls -l /home/$SUDO_USER/Área\ de\ Trabalho/)"
 
 # To-do list --> regex limpar terminal colorido
-printf "$BLUE_N" "[Script][$(date +%T)] Criando relatório na home com especificações do hardware..."
+printf "%s" "$BLUE_N" "[Script][$(date +%T)] Criando relatório na home com especificações do hardware..."
 inxi -F | tee /home/$SUDO_USER/hardinfo.txt
 
 echo "<?php phpinfo(); ?>" > /home/$SUDO_USER/html/testphp.php
