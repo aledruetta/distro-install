@@ -64,7 +64,7 @@ readonly BLUE='\033[1;34m%s\033[0m'
 
 printf "%s" "$BLUE" "[Script][$(date +%T)] Superusuário"
 
-if [ "$(id -u)" -ne 0 ] || [ -z $DESK_ENV ]; then
+if [[ "$(id -u)" -ne 0 ]] || [[ -z $DESK_ENV ]]; then
 	printf "%s" "$RED_N" " Fail!"
 	echo "O script deve ser executado como superusuário (sudo)"
 	echo "e preservando as variáveis de ambiente (opção -E):"
@@ -79,8 +79,8 @@ printf "%s" "$GREEN_N" " OK!"
 
 printf "%s" "$BLUE" "[Script][$(date +%T)] Sistema Operacional detectado: $DESCRIPTION ($ARQ_PROC-bit) $DESK_ENV"
 
-if [ $DISTRIBUTOR != "LinuxMint" ] || [ $CODENAME != "rosa" ] || \
-	[ $ARQ_PROC -ne 32 ] || [ "$DESK_ENV" != "mate" ]
+if [[ $DISTRIBUTOR != "LinuxMint" ]] || [[ $CODENAME != "rosa" ]] || \
+	[[ $ARQ_PROC -ne 32 ]] || [[ "$DESK_ENV" != "mate" ]]
 then
 	printf "%s" "$RED_N" " Fail!"
 	echo "Esse script foi escrito para Linux Mint 17.3 Rosa (32-bit) Mate"
@@ -105,7 +105,7 @@ apt-get install ubuntu-restricted-extras build-essential -y
 
 # PPA's
 
-if [ ! -s "$JDK_PPA_F" ]; then		# Java
+if [[ ! -s "$JDK_PPA_F" ]]; then		# Java
 	printf "%s" "$BLUE_N" "[Script][$(date +%T)] Adicionando repositório de terceiros $JDK_PPA..."
 	apt-add-repository $JDK_PPA -y
 else
@@ -114,7 +114,7 @@ else
 fi
 printf "%s" "$RED_N" "$(cat /etc/apt/sources.list.d/*.list | grep openjdk)"
 
-if [ ! -s "$NETB_PPA_F" ]; then		# Netbeans
+if [[ ! -s "$NETB_PPA_F" ]]; then		# Netbeans
 	printf "%s" "$BLUE_N" "[Script][$(date +%T)] Adicionando repositório de terceiros $NETB_PPA..."
 	# add-apt-repository $NETB_PPA -y
 else
@@ -123,7 +123,7 @@ else
 fi
 printf "%s" "$RED_N" "$(cat /etc/apt/sources.list.d/*.list | grep netbeans)"
 
-if [ ! -s "$SUB3_PPA_F" ]; then		# Sublime-Text
+if [[ ! -s "$SUB3_PPA_F" ]]; then		# Sublime-Text
 	printf "%s" "$BLUE_N" "[Script][$(date +%T)] Adicionando repositório de terceiros $SUB3_PPA..."
 	add-apt-repository $SUB3_PPA -y
 else
@@ -151,7 +151,7 @@ printf "%s" "$RED_N" "$(eval 'javac -version')"
 # Netbeans IDE 8.1
 
 printf "%s" "$BLUE_N" "[Script][$(date +%T)] Instalando Netbeans 8.1 IDE..."
-if [ ! -d "/opt/netbeans" ]; then
+if [[ ! -d "/opt/netbeans" ]]; then
 	mkdir -p /opt/netbeans
 fi
 # apt-get install netbeans-installer -y
@@ -203,7 +203,7 @@ chmod g+s /var/www/html
 printf "%s" "$RED_N" "$(ls -ld /var/www/html)"
 
 printf "%s" "$BLUE_N" "[Script][$(date +%T)] Criando link simbólico na home do usuário '$SUDO_USER'..."
-if [ ! -h "/home/$SUDO_USER/html" ]; then
+if [[ ! -h "/home/$SUDO_USER/html" ]]; then
 	ln -s /var/www/html /home/$SUDO_USER
 fi
 printf "%s" "$RED_N" "$(ls -ld /home/$SUDO_USER/html)"
@@ -221,7 +221,7 @@ apt-get install libapache2-mod-auth-mysql php5-mysql phpmyadmin -y
 
 printf "%s" "$BLUE_N" "[Script][$(date +%T)] Configurando PHP para trabalhar com MySQL..."
 
-if [ ! -s "/etc/php5/apache2/php.ini.bak" ]; then
+if [[ ! -s "/etc/php5/apache2/php.ini.bak" ]]; then
 	# Backup
 	cp /etc/php5/apache2/php.ini /etc/php5/apache2/php.ini.bak
 fi
@@ -236,7 +236,7 @@ printf "%s" "$BLUE_N" "[Script][$(date +%T)] Reiniciando Apache..."
 
 printf "%s" "$BLUE_N" "[Script][$(date +%T)] Configurando phpMyAdmin para acessar sem senha..."
 
-if [ ! -s "/etc/phpmyadmin/config.inc.php.bak" ]; then
+if [[ ! -s "/etc/phpmyadmin/config.inc.php.bak" ]]; then
 	# Backup
 	cp /etc/phpmyadmin/config.inc.php /etc/phpmyadmin/config.inc.php.bak
 fi
@@ -246,7 +246,7 @@ printf "%s" "$RED_N" "$(grep -n 'AllowNoPassword' /etc/phpmyadmin/config.inc.php
 
 printf "%s" "$BLUE_N" "[Script][$(date +%T)] Configurando Apache para acessar phpMyAdmin..."
 
-if [ ! -s "/etc/apache2/apache2.conf.bak" ]; then
+if [[ ! -s "/etc/apache2/apache2.conf.bak" ]]; then
 	# Backup
 	cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf.bak
 fi
@@ -254,7 +254,7 @@ fi
 include="Include /etc/phpmyadmin/apache.conf"
 saida=$(eval 'grep -n "$include" /etc/apache2/apache2.conf')
 
-if [ -z "$saida" ]; then
+if [[ -z "$saida" ]]; then
 	echo "$include" >> /etc/apache2/apache2.conf
 fi
 printf "%s" "$RED_N" "$(eval 'grep -n "$include" /etc/apache2/apache2.conf')"
@@ -267,14 +267,14 @@ printf "%s" "$BLUE_N" "[Script][$(date +%T)] Reiniciando Apache..."
 # to-do list --> corrigir entrada de dados
 printf "%s" "$BLUE_N" "[Script][$(date +%T)] Criando conta aluno (passwd: 'aluno'...)"
 idaluno="$(id aluno 2> /dev/null)"
-if [ -z "$idaluno" ]; then
+if [[ -z "$idaluno" ]]; then
 	adduser aluno
 	adduser aluno www-data
 	printf "%s" "$RED_N" "$idaluno"
 fi
 
 printf "%s" "$BLUE_N" "[Script][$(date +%T)] Criando link simbólico na home do aluno para /var/www/html..."
-if [ ! -h "/home/aluno/html" ]; then
+if [[ ! -h "/home/aluno/html" ]]; then
 	ln -s /var/www/html /home/aluno
 fi
 
@@ -296,7 +296,7 @@ apps=('/usr/share/applications/gcalctool.desktop'
 '/usr/share/applications/mysql-workbench.desktop')
 
 printf "%s" "$BLUE_N" "[Script][$(date +%T)] Mudando o proprietário e as permissões da área de trabalho do usuário"
-if [ ! -d "/home/aluno/Área\ de\ Trabalho/" ]; then
+if [[ ! -d "/home/aluno/Área\ de\ Trabalho/" ]]; then
 	mkdir /home/aluno/Área\ de\ Trabalho/
 fi
 chown $SUDO_USER:$SUDO_USER /home/aluno/Área\ de\ Trabalho/
