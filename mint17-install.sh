@@ -39,6 +39,11 @@
 # along with mint17-install. If not, see <http://www.gnu.org/licenses/>.
 
 
+# set -e --> stop script if error
+# set -u --> don't evaluate unset variables
+# set -x --> for debugging
+set -eux
+
 # Constantes
 readonly DESCRIPTION="$(lsb_release -ds)"
 readonly CODENAME="$(lsb_release -cs)"
@@ -116,7 +121,7 @@ printf "%s" "$RED_N" "$(cat /etc/apt/sources.list.d/*.list | grep openjdk)"
 
 if [[ ! -s "$NETB_PPA_F" ]]; then		# Netbeans
 	printf "%s" "$BLUE_N" "[Script][$(date +%T)] Adicionando repositório de terceiros $NETB_PPA..."
-	# add-apt-repository $NETB_PPA -y
+	add-apt-repository $NETB_PPA -y
 else
 	printf "%s" "$BLUE" "[Script][$(date +%T)] $NETB_PPA já existe"
 	printf "%s" "$GREEN_N" " OK!"
@@ -154,7 +159,7 @@ printf "%s" "$BLUE_N" "[Script][$(date +%T)] Instalando Netbeans 8.1 IDE..."
 if [[ ! -d "/opt/netbeans" ]]; then
 	mkdir -p /opt/netbeans
 fi
-# apt-get install netbeans-installer -y
+apt-get install netbeans-installer -y
 
 # Sublime Text
 
